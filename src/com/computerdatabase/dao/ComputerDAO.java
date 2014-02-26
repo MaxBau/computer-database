@@ -1,5 +1,7 @@
 package com.computerdatabase.dao;
 
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,6 +10,7 @@ import java.util.List;
 
 import com.computerdatabase.classes.Company;
 import com.computerdatabase.classes.Computer;
+import com.computerdatabase.jdbc.ConnectionMySql;
 
 
 public class ComputerDAO extends DAO<Computer> {
@@ -31,7 +34,20 @@ public class ComputerDAO extends DAO<Computer> {
 
 	@Override
 	public Computer create(Computer obj) {
-		// TODO Auto-generated method stub
+		java.sql.Date introduced = new java.sql.Date(obj.getIntroduced().getTime());
+		java.sql.Date discontinued = new java.sql.Date(obj.getDiscontinued().getTime());
+		String query = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES ('"+obj.getName()+"','"+introduced+"','"+discontinued+"','"+obj.getCompany().getId()+"')";
+		Connection connect = ConnectionMySql.getInstance();
+	
+			Statement stmt;
+			try {
+				stmt = connect.createStatement();
+				stmt.executeUpdate(query);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		return null;
 	}
 
@@ -54,6 +70,8 @@ public class ComputerDAO extends DAO<Computer> {
 		String query = "SELECT * FROM computer";
 		ResultSet results = null;
 		
+		Connection connect = ConnectionMySql.getInstance();
+		
 		try {
 			Statement stmt = connect.createStatement();
 			results = stmt.executeQuery(query);
@@ -70,15 +88,18 @@ public class ComputerDAO extends DAO<Computer> {
 				computer.setIntroduced(results.getDate("introduced"));
 				computer.setDiscontinued(results.getDate("discontinued"));
 				
-				Company company = CompanyDAO.getInstance().find(results.getLong("company"));
-				computer.setCompany(company);
-				
+				long company_id = results.getLong("company_id");
+				if (company_id!=0) {
+					Company company = CompanyDAO.getInstance().find(company_id);
+					computer.setCompany(company);
+				}				
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return computers;
 	}
 

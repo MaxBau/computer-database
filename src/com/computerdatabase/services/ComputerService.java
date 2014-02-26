@@ -24,4 +24,8 @@ public class ComputerService {
 	{
 		return computerDAO.findAll();
 	}
+	
+	public void createComputer(Computer obj) {
+		computerDAO.create(obj);
+	}
 }

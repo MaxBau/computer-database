@@ -1,11 +1,14 @@
 package com.computerdatabase.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.computerdatabase.classes.Company;
+import com.computerdatabase.jdbc.ConnectionMySql;
 
 
 public class CompanyDAO extends DAO<Company> {
@@ -28,6 +31,8 @@ public class CompanyDAO extends DAO<Company> {
 		String query = "SELECT * FROM company WHERE id="+id;
 		ResultSet results = null;
 		
+		Connection connect = ConnectionMySql.getInstance();
+		
 		try {
 			Statement stmt = connect.createStatement();
 			results = stmt.executeQuery(query);
@@ -38,8 +43,12 @@ public class CompanyDAO extends DAO<Company> {
 		
 		Company company = new Company();
 		try {
-			company.setId(results.getLong("id"));
-			company.setName(results.getString("name"));
+			while (results.next())
+			{
+				company.setId(results.getLong("id"));
+				company.setName(results.getString("name"));
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,6 +60,7 @@ public class CompanyDAO extends DAO<Company> {
 	@Override
 	public Company create(Company obj) {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -69,7 +79,36 @@ public class CompanyDAO extends DAO<Company> {
 	@Override
 	public List<Company> findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM company ";
+		List<Company> companies = new ArrayList<Company>();
+		ResultSet results = null;
+		
+		Connection connect = ConnectionMySql.getInstance();
+		
+		try {
+			Statement stmt = connect.createStatement();
+			results = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			while (results.next())
+			{
+				Company company = new Company();
+				company.setId(results.getLong("id"));
+				company.setName(results.getString("name"));
+				companies.add(company);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return companies;
 	}
 
 }
