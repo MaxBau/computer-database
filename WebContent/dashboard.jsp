@@ -7,7 +7,6 @@
 
 
 <section id="main">
-	${message}
 	<h1 id="homeTitle">${fn:length(computers)} Computers found</h1>
 	<div id="actions">
 		<form action="" method="GET">
@@ -36,7 +35,7 @@
 			<tbody>
 <c:forEach var="computer" items="${requestScope['computers']}">
 	<tr>
-		<td><a href="#" onclick="">${computer.name}</a></td>
+		<td><a href="EditComputerServlet?id=${computer.id}" onclick="">${computer.name}</a></td>
 		<td>${computer.introduced}</td>
 		<td>${computer.discontinued}</td>
 		<td>${computer.company.name }</td>

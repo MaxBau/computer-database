@@ -4,14 +4,21 @@
 <jsp:include page="include/header.jsp" />
 <section id="main">
 ${message}
-	<h1>Add Computer</h1>
+	<h1>Edit Computer</h1>
 	
-	<form action="AddComputerServlet" method="POST">
+	<form action="EditComputerServlet" method="POST">
 		<fieldset>
+		<div class="clearfix">
+				<label for="id">Computer id:</label>
+				<div class="input">
+					<input type="text" name="id" value="${computer.id}" readonly/>
+					<span class="help-inline">Required</span>
+				</div>
+			</div>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
 				<div class="input">
-					<input type="text" name="name" />
+					<input type="text" name="name" value="${computer.name}" />
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
@@ -19,14 +26,14 @@ ${message}
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input">
-					<input type="date" name="introducedDate" pattern="YY-MM-dd"/>
+					<input type="date" name="introducedDate" value="${computer.introduced}" pattern="YY-MM-dd"/>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" pattern="YY-MM-dd"/>
+					<input type="date" name="discontinuedDate" value="${computer.discontinued}" pattern="YY-MM-dd"/>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
@@ -36,14 +43,14 @@ ${message}
 					<select name="company">
 						<option value="0">--</option>
 						<c:forEach var="company" items="${requestScope['companies']}">
-							<option value="${company.id}">${company.name}</option>
+							<option value="${company.id}" ${company.id == computer.company.id ? 'selected' : ''}>${company.name}</option>
 						</c:forEach>
 					</select>
 				</div>
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Add" class="btn primary">
+			<input type="submit" value="Edit" class="btn primary">
 			or <a href="DashboardServlet" class="btn">Cancel</a>
 		</div>
 	</form>

@@ -2,6 +2,7 @@ package com.computerdatabase.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,7 +30,40 @@ public class ComputerDAO extends DAO<Computer> {
 	@Override
 	public Computer find(long id) {
 		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM computer WHERE id="+id;
+		ResultSet results = null;
+		
+		Connection connect = ConnectionMySql.getInstance();
+		
+		try {
+			Statement stmt = connect.createStatement();
+			results = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Computer computer = new Computer();
+		
+		try {
+			while (results.next()) {
+				computer.setId(results.getLong("id"));
+				computer.setName(results.getString("name"));
+				computer.setIntroduced(results.getDate("introduced"));
+				computer.setDiscontinued(results.getDate("discontinued"));
+				
+				long company_id = results.getLong("company_id");
+				if (company_id!=0) {
+					Company company = CompanyDAO.getInstance().find(company_id);
+					computer.setCompany(company);
+				}				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return computer;
 	}
 
 	@Override
@@ -53,8 +87,26 @@ public class ComputerDAO extends DAO<Computer> {
 
 	@Override
 	public Computer update(Computer obj) {
-		// TODO Auto-generated method stub
-		return null;
+		java.sql.Date introduced = new java.sql.Date(obj.getIntroduced().getTime());
+		java.sql.Date discontinued = new java.sql.Date(obj.getDiscontinued().getTime());
+		String query = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=?";
+		Connection connect = ConnectionMySql.getInstance();
+	
+			PreparedStatement stmt;
+			try {
+				stmt = connect.prepareStatement(query);
+				stmt.setString(1,obj.getName());
+				stmt.setDate(2, introduced);
+				stmt.setDate(3, discontinued);
+				stmt.setLong(4,obj.getCompany().getId());
+				stmt.setLong(5, obj.getId());
+				stmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		return obj;
 	}
 
 	@Override

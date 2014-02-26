@@ -28,4 +28,13 @@ public class ComputerService {
 	public void createComputer(Computer obj) {
 		computerDAO.create(obj);
 	}
+	
+	public Computer getComputerById(long id) {
+		return computerDAO.find(id);
+	}
+
+	public Computer updateComputer(Computer computer) {
+		// TODO Auto-generated method stub
+		return computerDAO.update(computer);
+	}
 }

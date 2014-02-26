@@ -18,28 +18,34 @@ import com.computerdatabase.services.CompanyService;
 import com.computerdatabase.services.ComputerService;
 
 /**
- * Servlet implementation class AddComputerServlet
+ * Servlet implementation class EditComputerServlet
  */
-@WebServlet("/AddComputerServlet")
-public class AddComputerServlet extends HttpServlet {
+@WebServlet("/EditComputerServlet")
+public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddComputerServlet() {
+    public EditComputerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
+
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		CompanyService cs = CompanyService.getInstance();
-		request.setAttribute("companies", cs.getAllCompany());
-		RequestDispatcher rd = request.getRequestDispatcher("/addComputer.jsp");
+		ComputerService cs = ComputerService.getInstance();
+		request.setAttribute("computer", cs.getComputerById(Long.parseLong(request.getParameter("id"))));
+		
+		CompanyService companyS = CompanyService.getInstance();
+		request.setAttribute("companies", companyS.getAllCompany());
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/editComputer.jsp");
 		rd.forward(request, response);
 	}
 
@@ -48,6 +54,7 @@ public class AddComputerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		long id = Long.parseLong(request.getParameter("id"));
 		String name = (String) request.getParameter("name");
 		String introduced = request.getParameter("introducedDate");
 		String discontinued = request.getParameter("discontinuedDate");
@@ -69,12 +76,15 @@ public class AddComputerServlet extends HttpServlet {
 		
 		Company company = new Company();
 		company.setId(companyId);
-		Computer computer = new Computer(name, introducedSubmit, discontinuedSubmit, company);
+		Computer computer = new Computer(id,name, introducedSubmit, discontinuedSubmit, company);
 		ComputerService cd = ComputerService.getInstance();
-		cd.createComputer(computer);
+		Computer editedComputer = cd.updateComputer(computer);
 		
-		request.setAttribute("message", "Ajout éffectué");
-		RequestDispatcher rd = request.getRequestDispatcher("addComputer.jsp");
+		request.setAttribute("message", "Modification éffectuée");
+		request.setAttribute("computer",editedComputer);
+		CompanyService companyS = CompanyService.getInstance();
+		request.setAttribute("companies", companyS.getAllCompany());
+		RequestDispatcher rd = request.getRequestDispatcher("editComputer.jsp");
 		rd.forward(request, response);
 	}
 
