@@ -15,4 +15,28 @@
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
+  <servlet>
+    <servlet-name>Dashboard</servlet-name>
+    <servlet-class>com.computerdatabase.servlets.DashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Dashboard</servlet-name>
+    <url-pattern>/Dashboard</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddComputer</servlet-name>
+    <servlet-class>com.computerdatabase.servlets.AddComputerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddComputer</servlet-name>
+    <url-pattern>/AddComputer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>EditComputer</servlet-name>
+    <servlet-class>com.computerdatabase.servlets.EditComputerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditComputer</servlet-name>
+    <url-pattern>/EditComputer</url-pattern>
+  </servlet-mapping>
 </web-app>

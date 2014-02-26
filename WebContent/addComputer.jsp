@@ -2,16 +2,20 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <jsp:include page="include/header.jsp" />
+<script type="text/javascript" src="validFormAdd.js">
+
+</script>
+
 <section id="main">
 ${message}
 	<h1>Add Computer</h1>
-	
-	<form action="AddComputerServlet" method="POST">
+	<div id="message"></div>
+	<form action="AddComputerServlet" id="formAdd" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
 				<div class="input">
-					<input type="text" name="name" />
+					<input type="text" id="nameInput" name="name" />
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
@@ -19,21 +23,23 @@ ${message}
 			<div class="clearfix">
 				<label for="introduced">Introduced date:</label>
 				<div class="input">
-					<input type="date" name="introducedDate" pattern="YY-MM-dd"/>
+				<input type="date" id="introducedInput" name="introducedDate" />
+<!-- 					<input type="date" id="introducedInput" name="introducedDate" pattern="yyyy-MM-dd"/> -->
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued">Discontinued date:</label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" pattern="YY-MM-dd"/>
+				<input type="date" id="discontinuedInput" name="discontinuedDate" />
+<!-- 					<input type="date" id="discontinuedInput" name="discontinuedDate" pattern="yyyy-MM-dd"/> -->
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="company">Company Name:</label>
 				<div class="input">
-					<select name="company">
+					<select name="company" id="companyInput">
 						<option value="0">--</option>
 						<c:forEach var="company" items="${requestScope['companies']}">
 							<option value="${company.id}">${company.name}</option>
@@ -43,8 +49,10 @@ ${message}
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Add" class="btn primary">
-			or <a href="DashboardServlet" class="btn">Cancel</a>
+				<a href="#" onclick="validForm();" class="btn primary">Add</a>
+					or <a href="DashboardServlet" class="btn">Cancel</a>
+<!-- 			<input type="submit" value="Add" class="btn primary"> -->
+<!-- 			or <a href="DashboardServlet" class="btn">Cancel</a> -->
 		</div>
 	</form>
 </section>

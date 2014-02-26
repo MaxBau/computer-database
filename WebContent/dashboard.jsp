@@ -30,15 +30,17 @@
 					<th>Discontinued Date</th>
 					<!-- Table header for Company -->
 					<th>Company</th>
+					<th> </th>
 				</tr>
 			</thead>
 			<tbody>
 <c:forEach var="computer" items="${requestScope['computers']}">
 	<tr>
-		<td><a href="EditComputerServlet?id=${computer.id}" onclick="">${computer.name}</a></td>
+		<td><a href="EditComputerServlet?id=${computer.id}&action=edit" onclick="">${computer.name}</a></td>
 		<td>${computer.introduced}</td>
 		<td>${computer.discontinued}</td>
 		<td>${computer.company.name }</td>
+		<td><a href="EditComputerServlet?action=delete&id=${computer.id}" class="btn danger">Delete</a>
 	</tr>
 </c:forEach>
 			</tbody>

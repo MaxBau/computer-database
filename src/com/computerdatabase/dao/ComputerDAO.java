@@ -70,13 +70,24 @@ public class ComputerDAO extends DAO<Computer> {
 	public Computer create(Computer obj) {
 		java.sql.Date introduced = new java.sql.Date(obj.getIntroduced().getTime());
 		java.sql.Date discontinued = new java.sql.Date(obj.getDiscontinued().getTime());
-		String query = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES ('"+obj.getName()+"','"+introduced+"','"+discontinued+"','"+obj.getCompany().getId()+"')";
+		String query = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 		Connection connect = ConnectionMySql.getInstance();
 	
-			Statement stmt;
+			PreparedStatement stmt;
 			try {
-				stmt = connect.createStatement();
-				stmt.executeUpdate(query);
+				stmt = connect.prepareStatement(query);
+				stmt.setString(1, obj.getName());
+				stmt.setDate(2, introduced);
+				stmt.setDate(3, discontinued);
+				
+				if (obj.getCompany().getId()!=0) {
+					stmt.setLong(4,obj.getCompany().getId());
+				}
+				else {
+					stmt.setNull(4, java.sql.Types.INTEGER);
+				}
+				
+				stmt.executeUpdate();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -110,8 +121,19 @@ public class ComputerDAO extends DAO<Computer> {
 	}
 
 	@Override
-	public void delete(Computer obj) {
-		// TODO Auto-generated method stub
+	public void delete(long id) {
+		String query = "DELETE FROM computer WHERE id=?";
+		Connection connect = ConnectionMySql.getInstance();
+		
+		PreparedStatement stmt;
+		try {
+			stmt = connect.prepareStatement(query);
+			stmt.setLong(1, id);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -153,6 +175,11 @@ public class ComputerDAO extends DAO<Computer> {
 		}
 
 		return computers;
+	}
+	@Override
+	public void delete(Computer obj) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

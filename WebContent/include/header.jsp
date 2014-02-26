@@ -8,8 +8,9 @@
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 </head>
-<body>
+<body >
 	<header class="topbar">
 		<h1 class="fill">
 			<a href="DashboardServlet"> Application - Computer Database </a>

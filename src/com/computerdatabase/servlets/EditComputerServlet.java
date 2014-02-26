@@ -5,7 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.naming.Context;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,21 +35,30 @@ public class EditComputerServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		ComputerService cs = ComputerService.getInstance();
-		request.setAttribute("computer", cs.getComputerById(Long.parseLong(request.getParameter("id"))));
+
+		if (request.getParameter("action").equals("delete")) {
+			ComputerService cs = ComputerService.getInstance();
+			long idComputer = Long.parseLong(request.getParameter("id"));
+			cs.deleteComputer(idComputer);
+			
+			RequestDispatcher rd = request.getRequestDispatcher("/Dashboard");
+			rd.forward(request, response);
+		}
+		else {
+			ComputerService cs = ComputerService.getInstance();
+			request.setAttribute("computer", cs.getComputerById(Long.parseLong(request.getParameter("id"))));
+			
+			CompanyService companyS = CompanyService.getInstance();
+			request.setAttribute("companies", companyS.getAllCompany());
+			
+			RequestDispatcher rd = request.getRequestDispatcher("/editComputer.jsp");
+			rd.forward(request, response);
+		}
 		
-		CompanyService companyS = CompanyService.getInstance();
-		request.setAttribute("companies", companyS.getAllCompany());
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/editComputer.jsp");
-		rd.forward(request, response);
 	}
 
 	/**
@@ -84,7 +96,8 @@ public class EditComputerServlet extends HttpServlet {
 		request.setAttribute("computer",editedComputer);
 		CompanyService companyS = CompanyService.getInstance();
 		request.setAttribute("companies", companyS.getAllCompany());
-		RequestDispatcher rd = request.getRequestDispatcher("editComputer.jsp");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/Dashboard");
 		rd.forward(request, response);
 	}
 

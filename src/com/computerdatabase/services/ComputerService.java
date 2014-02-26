@@ -37,4 +37,8 @@ public class ComputerService {
 		// TODO Auto-generated method stub
 		return computerDAO.update(computer);
 	}
+	
+	public void deleteComputer(long id) {
+		computerDAO.delete(id);
+	}
 }

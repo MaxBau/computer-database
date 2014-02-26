@@ -3,6 +3,8 @@ package com.computerdatabase.servlets;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,7 +34,7 @@ public class DashboardServlet extends HttpServlet {
 	
 		ComputerService cs = ComputerService.getInstance();
 		request.setAttribute("computers", cs.getAllComputers());
-		RequestDispatcher rd = request.getRequestDispatcher("/dashboard.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");
 		rd.forward(request, response);
 	}
 
@@ -41,6 +43,10 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ComputerService cs = ComputerService.getInstance();
+		request.setAttribute("computers", cs.getAllComputers());
+		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");
+		rd.forward(request, response);
 	}
 
 }
