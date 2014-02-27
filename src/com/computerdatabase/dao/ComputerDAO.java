@@ -181,5 +181,64 @@ public class ComputerDAO extends DAO<Computer> {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public List<Computer> getInLimit(int min,int max) {
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT * FROM computer LIMIT "+min+","+max;
+		ResultSet results = null;
+		
+		Connection connect = ConnectionMySql.getInstance();
+		
+		try {
+			Statement stmt= connect.createStatement();
+			results = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			while (results.next()) {
+				Computer computer = new Computer();
+				computer.setId(results.getLong("id"));
+				computer.setName(results.getString("name"));
+				computer.setIntroduced(results.getDate("introduced"));
+				computer.setDiscontinued(results.getDate("discontinued"));
+				
+				long company_id = results.getLong("company_id");
+				if (company_id!=0) {
+					Company company = CompanyDAO.getInstance().find(company_id);
+					computer.setCompany(company);
+				}				
+				computers.add(computer);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return computers;
+	}
+	@Override
+	public int count() {
+		String query = "SELECT COUNT(id) AS nb FROM computer";
+		ResultSet results = null;
+		int count = 0;
+		Connection connect = ConnectionMySql.getInstance();
+		
+		try {
+			Statement stmt = connect.createStatement();
+			results = stmt.executeQuery(query);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			while (results.next()) {
+				count = results.getInt("nb");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 
 }

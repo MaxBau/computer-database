@@ -12,8 +12,7 @@ public abstract class DAO<T> {
 	public abstract T update(T obj);
 	public abstract void delete(T obj);
 	public abstract List<T> findAll();
-	public void delete(long id) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract int count();
+	public abstract void delete(long id);
+
 }

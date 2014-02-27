@@ -111,4 +111,16 @@ public class CompanyDAO extends DAO<Company> {
 		return companies;
 	}
 
+	@Override
+	public int count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void delete(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

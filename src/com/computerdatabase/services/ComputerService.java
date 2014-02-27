@@ -41,4 +41,12 @@ public class ComputerService {
 	public void deleteComputer(long id) {
 		computerDAO.delete(id);
 	}
+	
+	public List<Computer> getComputersInLimit(int limitMin,int limitMax) {
+		return computerDAO.getInLimit(limitMin,limitMax);
+	}
+	
+	public int countComputer() {
+		return computerDAO.count();
+	}
 }

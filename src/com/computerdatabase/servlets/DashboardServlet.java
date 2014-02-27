@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.computerdatabase.services.ComputerService;
+import com.computerdatabase.taglibs.Paginator;
 
 /**
  * Servlet implementation class ListComputer
@@ -31,9 +32,22 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 		ComputerService cs = ComputerService.getInstance();
-		request.setAttribute("computers", cs.getAllComputers());
+		Paginator.setItemsPerPage(100);	
+		String action = "initialize";
+		if (request.getParameter("action") != null ) action = request.getParameter("action");
+		
+		if (action.equals("previousPage")) {
+			request.setAttribute("computers", Paginator.previousPage());
+		} else  {
+			request.setAttribute("computers", Paginator.nextPage());
+		}
+		
+		request.setAttribute("computerCount", cs.countComputer());
+		
+		
+		/*ComputerService cs = ComputerService.getInstance();
+		request.setAttribute("computers", cs.getAllComputers());*/
 		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");
 		rd.forward(request, response);
 	}
