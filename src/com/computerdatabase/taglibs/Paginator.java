@@ -1,50 +1,49 @@
 package com.computerdatabase.taglibs;
 
-import java.util.List;
+import java.io.IOException;
 
-import com.computerdatabase.classes.Computer;
-import com.computerdatabase.services.ComputerService;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
 
-public class Paginator {
-	private static int itemsPerPage;
-	private static int limitMin=0;
+public class Paginator extends TagSupport{
+	private int itemsPerPage =10;
+	private int limitMin=0;
+	private int collectionSize;
 	
-	public Paginator() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public static int getItemsPerPage() {
+	public int doStartTag() throws JspException
+    {
+		int nbPages = collectionSize/itemsPerPage;
+		JspWriter out = pageContext.getOut();
+		for (int i = 0; i < nbPages; i++) {
+			try {
+				out.write("<a href='DashboardServlet?limitmin="+(i*itemsPerPage)+"&limitmax="+itemsPerPage+"'>"+(i+1)+"</a> ");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+        
+        return EVAL_PAGE;
+    }
+	
+	public  int getItemsPerPage() {
 		return itemsPerPage;
 	}
-	public static void setItemsPerPage(int itemsPerPage) {
-		Paginator.itemsPerPage = itemsPerPage;
+	public  void setItemsPerPage(int itemsPerPage) {
+		this.itemsPerPage = itemsPerPage;
 	}
-	public static int getLimitMin() {
+	public int getLimitMin() {
 		return limitMin;
 	}
-	public static void setLimitMin(int limitMin) {
-		Paginator.limitMin = limitMin;
+	public void setLimitMin(int limitMin) {
+		this.limitMin = limitMin;
+	}
+	
+	public int getCollectionSize() {
+		return collectionSize;
 	}
 
-	
-	public static List<Computer> nextPage() {
-		limitMin += itemsPerPage;
-		
-		ComputerService cs = ComputerService.getInstance();
-		int countComputer = cs.countComputer();
-		if ((limitMin+itemsPerPage)>countComputer) limitMin = countComputer-itemsPerPage;
-		return cs.getComputersInLimit(limitMin,itemsPerPage);
+	public void setCollectionSize(int collectionSize) {
+		this.collectionSize = collectionSize;
 	}
-	
-	public static List<Computer> previousPage() {
-		limitMin -= itemsPerPage;
-		
-		if (limitMin<0) limitMin=0;
-		
-		ComputerService cs = ComputerService.getInstance();
-		return cs.getComputersInLimit(limitMin, itemsPerPage);
-	}
-	
-	
-
 }

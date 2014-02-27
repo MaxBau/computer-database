@@ -78,7 +78,6 @@ public class CompanyDAO extends DAO<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		// TODO Auto-generated method stub
 		String query = "SELECT * FROM company ";
 		List<Company> companies = new ArrayList<Company>();
 		ResultSet results = null;
@@ -112,6 +111,12 @@ public class CompanyDAO extends DAO<Company> {
 	}
 
 	@Override
+	public List<Company> findAll(int limitMin,int limitMax,String search,String order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public int count() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -122,5 +127,4 @@ public class CompanyDAO extends DAO<Company> {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

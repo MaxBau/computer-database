@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
+<%@ taglib uri="/WEB-INF/paginatorTaglib.tld" prefix="pag" %>
 
 <jsp:include page="include/header.jsp" />
 
@@ -11,7 +11,7 @@
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search"
-				value="" placeholder="Search name">
+				value="${sessionScope['search']}" placeholder="Search name">
 			<input type="submit" id="searchsubmit"
 				value="Filter by name"
 				class="btn primary">
@@ -24,12 +24,12 @@
 				<tr>
 					<!-- Variable declarations for passing labels as parameters -->
 					<!-- Table header for Computer Name -->
-					<th>Computer Name</th>
-					<th>Introduced Date</th>
+					<th><a href="DashboardServlet?order=name">Computer Name</a></th>
+					<th><a href="DashboardServlet?order=introduced">Introduced Date</a></th>
 					<!-- Table header for Discontinued Date -->
-					<th>Discontinued Date</th>
+					<th><a href="DashboardServlet?order=discontinued">Discontinued Date</a></th>
 					<!-- Table header for Company -->
-					<th>Company</th>
+					<th><a href="DashboardServlet?order=company_id">Company</a></th>
 					<th> </th>
 				</tr>
 			</thead>
@@ -45,14 +45,7 @@
 			</c:forEach>
 			</tbody>
 		</table>
-		Items per page :<select name="itemsPerPage">
-							<option value="10">10</option>
-							<option value="20">20</option>
-							<option value="30">30</option>
-							<option value="50">50</option>
-							<option value="100">100</option>
-						</select>
-		<a href="DashboardServlet?action=previousPage" class=btn><</a><a href="DashboardServlet?action=nextPage" class=btn>></a>
+		<pag:Paginator itemsPerPage="10" collectionSize="${computerCount}"></pag:Paginator>
 </section>
 
 <jsp:include page="include/footer.jsp" />

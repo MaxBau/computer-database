@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.computerdatabase.services.ComputerService;
 import com.computerdatabase.taglibs.Paginator;
@@ -33,21 +34,50 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComputerService cs = ComputerService.getInstance();
-		Paginator.setItemsPerPage(100);	
-		String action = "initialize";
-		if (request.getParameter("action") != null ) action = request.getParameter("action");
-		
-		if (action.equals("previousPage")) {
-			request.setAttribute("computers", Paginator.previousPage());
-		} else  {
-			request.setAttribute("computers", Paginator.nextPage());
+		int limitMin = 0;
+		int limitMax = 10;
+		String search="";
+		String order = "id";
+		HttpSession session = request.getSession();	
+
+		if (request.getParameter("limitmin")!=null) {
+			if (!(session.getAttribute("limitmin").equals(request.getParameter("limitmin")))) {
+				session.setAttribute("limitmin",request.getParameter("limitmin"));
+			}
+		}
+		else {
+			session.setAttribute("limitmin", limitMin);
 		}
 		
+		if (request.getParameter("limitmax")!=null) {
+			if (!(session.getAttribute("limitmax").equals(request.getParameter("limitmax")))) {
+				session.setAttribute("limitmax",request.getParameter("limitmax"));
+			}
+		} else {
+			session.setAttribute("limitmax", limitMax);
+		}
+		
+		if (request.getParameter("search")!=null) {
+			if (!(session.getAttribute("search").equals(request.getParameter("search")))) {
+				session.setAttribute("search",request.getParameter("search"));
+			}
+		}
+		
+		if (request.getParameter("order")!=null) {
+			if (!(session.getAttribute("order").equals(request.getParameter("order")))) {
+				session.setAttribute("order",request.getParameter("order"));
+			}
+		}
+		
+		if (session.getAttribute("limitmin") !=null) limitMin = Integer.parseInt(session.getAttribute("limitmin").toString());
+		if (session.getAttribute("limitmax") != null) limitMax = Integer.parseInt(session.getAttribute("limitmax").toString());
+		if (session.getAttribute("search") != null) search = session.getAttribute("search").toString();
+		if (session.getAttribute("order") !=null ) order = (String) session.getAttribute("order").toString();
+		
+		request.setAttribute("computers", cs.getAllComputers(limitMin, limitMax, search, order));		
 		request.setAttribute("computerCount", cs.countComputer());
+		if (!(search.equals(""))) request.setAttribute("computerCount", cs.getAllComputers(0, 10000, search, order).size());
 		
-		
-		/*ComputerService cs = ComputerService.getInstance();
-		request.setAttribute("computers", cs.getAllComputers());*/
 		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");
 		rd.forward(request, response);
 	}
@@ -56,7 +86,6 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		ComputerService cs = ComputerService.getInstance();
 		request.setAttribute("computers", cs.getAllComputers());
 		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");

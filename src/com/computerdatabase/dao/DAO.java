@@ -11,6 +11,7 @@ public abstract class DAO<T> {
 	public abstract T create(T obj);
 	public abstract T update(T obj);
 	public abstract void delete(T obj);
+	public abstract List<T> findAll(int limitMin,int limitMax,String search,String order);
 	public abstract List<T> findAll();
 	public abstract int count();
 	public abstract void delete(long id);

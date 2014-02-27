@@ -20,6 +20,11 @@ public class ComputerService {
 		return ComputerServiceHolder.instance;
 	}
 	
+	public List<Computer> getAllComputers(int limitMin,int limitMax, String search,String order)
+	{
+		return computerDAO.findAll(limitMin,limitMax,search,order);
+	}
+	
 	public List<Computer> getAllComputers()
 	{
 		return computerDAO.findAll();
@@ -40,10 +45,6 @@ public class ComputerService {
 	
 	public void deleteComputer(long id) {
 		computerDAO.delete(id);
-	}
-	
-	public List<Computer> getComputersInLimit(int limitMin,int limitMax) {
-		return computerDAO.getInLimit(limitMin,limitMax);
 	}
 	
 	public int countComputer() {

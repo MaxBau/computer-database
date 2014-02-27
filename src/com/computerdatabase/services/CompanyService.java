@@ -19,6 +19,10 @@ public class CompanyService {
 	public static CompanyService getInstance() {
 		return CompanyServiceHolder.instance;
 	}
+	public List<Company> getAllCompany(int limitMin,int limitMax,String search,String order) {
+		return companyDAO.findAll(limitMin,limitMax,search,order);
+	}
+	
 	public List<Company> getAllCompany() {
 		return companyDAO.findAll();
 	}
