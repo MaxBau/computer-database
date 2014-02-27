@@ -3,8 +3,6 @@ package com.computerdatabase.servlets;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.computerdatabase.services.ComputerService;
-import com.computerdatabase.taglibs.Paginator;
 
 /**
  * Servlet implementation class ListComputer
@@ -39,7 +36,13 @@ public class DashboardServlet extends HttpServlet {
 		String search="";
 		String order = "id";
 		HttpSession session = request.getSession();	
-
+		
+		if (session.getAttribute("sens")==null) session.setAttribute("sens", "DESC");
+		if (session.getAttribute("sens").toString().equals("ASC")) {
+			session.setAttribute("sens", "DESC");
+		} else {
+			session.setAttribute("sens", "ASC");
+		}
 		if (request.getParameter("limitmin")!=null) {
 			if (!(session.getAttribute("limitmin").equals(request.getParameter("limitmin")))) {
 				session.setAttribute("limitmin",request.getParameter("limitmin"));
@@ -74,9 +77,9 @@ public class DashboardServlet extends HttpServlet {
 		if (session.getAttribute("search") != null) search = session.getAttribute("search").toString();
 		if (session.getAttribute("order") !=null ) order = (String) session.getAttribute("order").toString();
 		
-		request.setAttribute("computers", cs.getAllComputers(limitMin, limitMax, search, order));		
+		request.setAttribute("computers", cs.getAllComputers(limitMin, limitMax, search, order,session.getAttribute("sens").toString()));		
 		request.setAttribute("computerCount", cs.countComputer());
-		if (!(search.equals(""))) request.setAttribute("computerCount", cs.getAllComputers(0, 10000, search, order).size());
+		if (!(search.equals(""))) request.setAttribute("computerCount", cs.getAllComputers(0, 10000, search, order,session.getAttribute("sens").toString()).size());
 		
 		RequestDispatcher rd = request.getRequestDispatcher("dashboard.jsp");
 		rd.forward(request, response);

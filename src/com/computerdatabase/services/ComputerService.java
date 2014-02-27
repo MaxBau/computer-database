@@ -20,9 +20,9 @@ public class ComputerService {
 		return ComputerServiceHolder.instance;
 	}
 	
-	public List<Computer> getAllComputers(int limitMin,int limitMax, String search,String order)
+	public List<Computer> getAllComputers(int limitMin,int limitMax, String search,String order,String sens)
 	{
-		return computerDAO.findAll(limitMin,limitMax,search,order);
+		return computerDAO.findAll(limitMin,limitMax,search,order,sens);
 	}
 	
 	public List<Computer> getAllComputers()

@@ -9,6 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.computerdatabase.classes.Company;
 import com.computerdatabase.classes.Computer;
 import com.computerdatabase.jdbc.ConnectionMySql;
@@ -138,9 +141,9 @@ public class ComputerDAO extends DAO<Computer> {
 	}
 
 	@Override
-	public List<Computer> findAll(int limitMin,int limitMax,String search,String order) {
+	public List<Computer> findAll(int limitMin,int limitMax,String search,String order,String sens) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%' ORDER BY "+order+" LIMIT "+limitMin+","+limitMax;
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%' ORDER BY "+order+" "+sens+" LIMIT "+limitMin+","+limitMax;
 		ResultSet results = null;
 		
 		Connection connect = ConnectionMySql.getInstance();
@@ -148,6 +151,9 @@ public class ComputerDAO extends DAO<Computer> {
 		try {
 			Statement stmt = connect.createStatement();
 			results = stmt.executeQuery(query);
+			Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+		    logger.info("Displaying computers query");
+
 		} catch (SQLException e) {
 			
 			e.printStackTrace();

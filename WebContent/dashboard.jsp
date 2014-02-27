@@ -29,7 +29,7 @@
 					<!-- Table header for Discontinued Date -->
 					<th><a href="DashboardServlet?order=discontinued">Discontinued Date</a></th>
 					<!-- Table header for Company -->
-					<th><a href="DashboardServlet?order=company_id">Company</a></th>
+					<th><a href="DashboardServlet?order=company.name">Company</a></th>
 					<th> </th>
 				</tr>
 			</thead>

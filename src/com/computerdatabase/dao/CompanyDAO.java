@@ -111,7 +111,7 @@ public class CompanyDAO extends DAO<Company> {
 	}
 
 	@Override
-	public List<Company> findAll(int limitMin,int limitMax,String search,String order) {
+	public List<Company> findAll(int limitMin,int limitMax,String search,String order,String sens) {
 		// TODO Auto-generated method stub
 		return null;
 	}
