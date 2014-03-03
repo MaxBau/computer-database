@@ -20,7 +20,7 @@ import com.computerdatabase.services.ComputerService;
 /**
  * Servlet implementation class AddComputerServlet
  */
-@WebServlet("/AddComputerServlet")
+@WebServlet("/AddComputer")
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

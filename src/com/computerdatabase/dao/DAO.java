@@ -1,12 +1,12 @@
 package com.computerdatabase.dao;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
-import com.computerdatabase.jdbc.ConnectionMySql;
+import com.computerdatabase.classes.Computer;
 
 public abstract class DAO<T> {
-	public Connection connect = ConnectionMySql.getInstance();
 	public abstract T find(long id);
 	public abstract T create(T obj);
 	public abstract T update(T obj);
@@ -15,5 +15,6 @@ public abstract class DAO<T> {
 	public abstract List<T> findAll();
 	public abstract int count();
 	public abstract void delete(long id);
+	public abstract Computer create(Connection connect, Computer obj) throws SQLException ;
 
 }

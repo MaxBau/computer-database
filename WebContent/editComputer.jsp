@@ -9,7 +9,7 @@
 ${message}
 	<h1>Edit Computer</h1>
 	<div id="message"></div>
-	<form action="EditComputerServlet" id="formAdd" method="POST">
+	<form action="EditComputer" id="formAdd" method="POST">
 		<fieldset>
 		<div class="clearfix">
 				<label for="id">Computer id:</label>
@@ -54,9 +54,7 @@ ${message}
 		</fieldset>
 		<div class="actions">
 			<a href="#" onclick="validForm();" class="btn primary">Edit</a>
-			or <a href="DashboardServlet" class="btn">Cancel</a> or <a href="EditComputerServlet?action=delete&id=${computer.id}" class="btn">Delete</a>
-<!-- 			<input type="submit" value="Edit" class="btn primary"> -->
-<%-- 			or <a href="Dashboard" class="btn">Cancel</a> or <a href="EditComputerServlet?action=delete&id=${computer.id}" class="btn">Delete</a> --%>
+			or <a href="Dashboard" class="btn">Cancel</a> or <a href="EditComputer?action=delete&id=${computer.id}" class="btn">Delete</a>
 		</div>
 	</form>
 </section>

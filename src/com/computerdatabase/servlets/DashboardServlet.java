@@ -15,7 +15,7 @@ import com.computerdatabase.services.ComputerService;
 /**
  * Servlet implementation class ListComputer
  */
-@WebServlet("/DashboardServlet")
+@WebServlet("/Dashboard")
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +38,9 @@ public class DashboardServlet extends HttpServlet {
 		HttpSession session = request.getSession();	
 		
 		if (session.getAttribute("sens")==null) session.setAttribute("sens", "DESC");
+		if (session.getAttribute("order")==null) session.setAttribute("order", "name");
+		if (session.getAttribute("search")==null) session.setAttribute("search", "");
+		
 		if (session.getAttribute("sens").toString().equals("ASC")) {
 			session.setAttribute("sens", "DESC");
 		} else {

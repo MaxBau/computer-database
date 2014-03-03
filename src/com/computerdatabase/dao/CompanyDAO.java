@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.computerdatabase.classes.Company;
+import com.computerdatabase.classes.Computer;
 import com.computerdatabase.jdbc.ConnectionMySql;
 
 
@@ -27,32 +28,40 @@ public class CompanyDAO extends DAO<Company> {
 	
 	@Override
 	public Company find(long id) {
-		// TODO Auto-generated method stub
+		
 		String query = "SELECT * FROM company WHERE id="+id;
 		ResultSet results = null;
 		
 		Connection connect = ConnectionMySql.getInstance();
-		
-		try {
-			Statement stmt = connect.createStatement();
+		Company company = null;
+		try (Statement stmt = connect.createStatement()){
+			
 			results = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Company company = new Company();
-		try {
+			company = new Company();
 			while (results.next())
 			{
 				company.setId(results.getLong("id"));
 				company.setName(results.getString("name"));
 			}
-			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			if (results!=null) {
+				try {
+					results.close();
+				} catch (SQLException e) {}
+			}
 		}
+		
+		
+
 		
 		return company;
 	}
@@ -84,16 +93,10 @@ public class CompanyDAO extends DAO<Company> {
 		
 		Connection connect = ConnectionMySql.getInstance();
 		
-		try {
-			Statement stmt = connect.createStatement();
+		try (Statement stmt = connect.createStatement()){
+			
 			results = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		try {
+			
 			while (results.next())
 			{
 				Company company = new Company();
@@ -101,10 +104,21 @@ public class CompanyDAO extends DAO<Company> {
 				company.setName(results.getString("name"));
 				companies.add(company);
 			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			if (results!=null) {
+				try {
+					results.close();
+				} catch (SQLException e) {}
+			}
 		}
 		
 		return companies;
@@ -126,5 +140,11 @@ public class CompanyDAO extends DAO<Company> {
 	public void delete(long id) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Computer create(Connection connect, Computer obj) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

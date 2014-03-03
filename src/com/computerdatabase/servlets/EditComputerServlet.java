@@ -23,7 +23,7 @@ import com.computerdatabase.services.ComputerService;
 /**
  * Servlet implementation class EditComputerServlet
  */
-@WebServlet("/EditComputerServlet")
+@WebServlet("/EditComputer")
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

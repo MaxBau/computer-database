@@ -18,6 +18,7 @@ import com.computerdatabase.jdbc.ConnectionMySql;
 
 
 public class ComputerDAO extends DAO<Computer> {
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private ComputerDAO()
 	{}
@@ -37,18 +38,12 @@ public class ComputerDAO extends DAO<Computer> {
 		ResultSet results = null;
 		
 		Connection connect = ConnectionMySql.getInstance();
-		
-		try {
-			Statement stmt = connect.createStatement();
+		Computer computer = null;
+		try (Statement stmt = connect.createStatement()){
 			results = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Computer computer = new Computer();
-		
-		try {
+			
+			computer = new Computer();
+			
 			while (results.next()) {
 				computer.setId(results.getLong("id"));
 				computer.setName(results.getString("name"));
@@ -64,37 +59,49 @@ public class ComputerDAO extends DAO<Computer> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			if (results!=null) {
+				try {
+					results.close();
+				} catch (SQLException e) {}
+			}
 		}
+		
 		
 		return computer;
 	}
 
 	@Override
-	public Computer create(Computer obj) {
+	public Computer create(Connection connect, Computer obj) throws SQLException {
 		java.sql.Date introduced = new java.sql.Date(obj.getIntroduced().getTime());
 		java.sql.Date discontinued = new java.sql.Date(obj.getDiscontinued().getTime());
 		String query = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-		Connection connect = ConnectionMySql.getInstance();
 	
-			PreparedStatement stmt;
+		PreparedStatement stmt = connect.prepareStatement(query);
+		stmt.setString(1, obj.getName());
+		stmt.setDate(2, introduced);
+		stmt.setDate(3, discontinued);
+				
+		if (obj.getCompany().getId()!=0) {
+			stmt.setLong(4,obj.getCompany().getId());
+		}
+		else {
+			stmt.setNull(4, java.sql.Types.INTEGER);
+		}
+				
+		stmt.executeUpdate(); 
+		
+		if (stmt!=null) {
 			try {
-				stmt = connect.prepareStatement(query);
-				stmt.setString(1, obj.getName());
-				stmt.setDate(2, introduced);
-				stmt.setDate(3, discontinued);
-				
-				if (obj.getCompany().getId()!=0) {
-					stmt.setLong(4,obj.getCompany().getId());
-				}
-				else {
-					stmt.setNull(4, java.sql.Types.INTEGER);
-				}
-				
-				stmt.executeUpdate();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				stmt.close();
+			} catch (SQLException e) {}
+		}
 			
 		return null;
 	}
@@ -106,9 +113,7 @@ public class ComputerDAO extends DAO<Computer> {
 		String query = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=?";
 		Connection connect = ConnectionMySql.getInstance();
 	
-			PreparedStatement stmt;
-			try {
-				stmt = connect.prepareStatement(query);
+			try (PreparedStatement stmt = connect.prepareStatement(query)){
 				stmt.setString(1,obj.getName());
 				stmt.setDate(2, introduced);
 				stmt.setDate(3, discontinued);
@@ -118,6 +123,12 @@ public class ComputerDAO extends DAO<Computer> {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+				if (connect!=null) {
+					try {
+						connect.close();
+					} catch (SQLException e) {}
+				}
 			}
 			
 		return obj;
@@ -128,14 +139,18 @@ public class ComputerDAO extends DAO<Computer> {
 		String query = "DELETE FROM computer WHERE id=?";
 		Connection connect = ConnectionMySql.getInstance();
 		
-		PreparedStatement stmt;
-		try {
-			stmt = connect.prepareStatement(query);
+		try (PreparedStatement stmt = connect.prepareStatement(query)){
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
 		}
 		
 	}
@@ -148,19 +163,11 @@ public class ComputerDAO extends DAO<Computer> {
 		
 		Connection connect = ConnectionMySql.getInstance();
 		
-		try {
-			Statement stmt = connect.createStatement();
+		try (Statement stmt = connect.createStatement()){
 			results = stmt.executeQuery(query);
-			Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 		    logger.info("Displaying computers query");
-
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-		
-		try {
-			while (results.next()) {
+		    
+		    while (results.next()) {
 				Computer computer = new Computer();
 				computer.setId(results.getLong("id"));
 				computer.setName(results.getString("name"));
@@ -174,11 +181,18 @@ public class ComputerDAO extends DAO<Computer> {
 				}				
 				computers.add(computer);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+		}
+		
 		return computers;
 	}
 	
@@ -190,15 +204,10 @@ public class ComputerDAO extends DAO<Computer> {
 		
 		Connection connect = ConnectionMySql.getInstance();
 		
-		try {
-			Statement stmt = connect.createStatement();
-			results = stmt.executeQuery(query);
-		} catch (SQLException e) {
+		try (Statement stmt = connect.createStatement()){
 			
-			e.printStackTrace();
-		}
-		
-		try {
+			results = stmt.executeQuery(query);
+			
 			while (results.next()) {
 				Computer computer = new Computer();
 				computer.setId(results.getLong("id"));
@@ -214,10 +223,22 @@ public class ComputerDAO extends DAO<Computer> {
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			if (results!=null) {
+				try {
+					results.close();
+				} catch (SQLException e) {}
+			}
 		}
-
+		
 		return computers;
 	}
 	@Override
@@ -233,22 +254,35 @@ public class ComputerDAO extends DAO<Computer> {
 		int count = 0;
 		Connection connect = ConnectionMySql.getInstance();
 		
-		try {
-			Statement stmt = connect.createStatement();
+		try (Statement stmt = connect.createStatement()){
+			
 			results = stmt.executeQuery(query);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		try {
+			
 			while (results.next()) {
 				count = results.getInt("nb");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			if (results!=null) {
+				try {
+					results.close();
+				} catch (SQLException e) {}
+			}
 		}
+		
 		return count;
+	}
+	@Override
+	public Computer create(Computer obj) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

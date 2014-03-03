@@ -13,6 +13,6 @@
 <body >
 	<header class="topbar">
 		<h1 class="fill">
-			<a href="DashboardServlet"> Application - Computer Database </a>
+			<a href="Dashboard"> Application - Computer Database </a>
 		</h1>
 	</header>
