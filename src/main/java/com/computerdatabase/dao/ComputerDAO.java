@@ -34,14 +34,15 @@ public class ComputerDAO extends DAO<Computer> {
 	@Override
 	public Computer find(long id) {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM computer WHERE id="+id;
+		String query = "SELECT * FROM computer WHERE id=?";
 		ResultSet results = null;
 		
 		Connection connect = ConnectionMySql.getInstance();
 		Computer computer = null;
-		try (Statement stmt = connect.createStatement()){
-			results = stmt.executeQuery(query);
+		try (PreparedStatement stmt = connect.prepareStatement(query)){
+			stmt.setLong(1, id);
 			
+			results = stmt.executeQuery();
 			computer = new Computer();
 			
 			while (results.next()) {
