@@ -1,17 +1,28 @@
 package springapp.web;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import springapp.domain.Computer;
+import springapp.domain.ComputerDTO;
 import springapp.service.CompanyService;
 import springapp.service.ComputerService;
 
@@ -23,6 +34,7 @@ public class ComputerController {
 	
 	ComputerService computerService;
 	CompanyService companyService;
+	FormValidator validator;
 
 	@Autowired
 	public void setCompanyService(CompanyService companyService) {
@@ -33,7 +45,22 @@ public class ComputerController {
 	public void setComputerService(ComputerService computerService) {
 		this.computerService = computerService;
 	}
+	
+	@Autowired
+	public void setValidator(FormValidator validator) {
+		this.validator = validator;
+	}
 
+	
+	
+	@InitBinder
+	private void initBinder(WebDataBinder binder) {  
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    sdf.setLenient(true);
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+	    binder.addValidators(validator);  
+	} 
+	
 	@RequestMapping("/dashboard")
 	public ModelAndView listComputers() {
 		
@@ -45,25 +72,54 @@ public class ComputerController {
 	}
 	
 	@RequestMapping("/addComputerForm")
-	public ModelAndView addComputerForm() {
+	public ModelAndView addComputerForm(Model m) {
 		ModelAndView myModel = new ModelAndView();
 		myModel.setViewName("addComputer");
 		myModel.addObject("companyList", companyService.getAllCompany());
+
+		m.addAttribute("computerDto", new ComputerDTO());
 		return myModel;
 	}
 
+//	@RequestMapping(value="/addComputer",method = RequestMethod.POST)
+//	public ModelAndView addComputer(@RequestParam(value="name",required=false) String name,
+//									@RequestParam(value="introducedDate",required=false) String introducedDate,
+//									@RequestParam(value = "discontinuedDate",required=false) String discontinuedDate,
+//									@RequestParam(value="company",required=false) long company) {
+//		logger.info("Adding computer");
+//		ModelAndView myModel = new ModelAndView();
+//		computerService.addComputer(name, introducedDate, discontinuedDate,company);
+//		
+//		myModel.setViewName("addComputer");
+//		myModel.addObject("companyList", companyService.getAllCompany());
+//		myModel.addObject("message", "Ajout éfféctué");
+//		return myModel;
+//	}
+	
 	@RequestMapping(value="/addComputer",method = RequestMethod.POST)
-	public ModelAndView addComputer(@RequestParam(value="name",required=false) String name,
-									@RequestParam(value="introducedDate",required=false) String introducedDate,
-									@RequestParam(value = "discontinuedDate",required=false) String discontinuedDate,
-									@RequestParam(value="company",required=false) long company) {
-		logger.info("Adding computer");
+	public ModelAndView addComputer(@Valid ComputerDTO computerDto,BindingResult result,Model m,final RedirectAttributes redirectAttributes) {
 		ModelAndView myModel = new ModelAndView();
-		computerService.addComputer(name, introducedDate, discontinuedDate,company);
 		
-		myModel.setViewName("addComputer");
-		myModel.addObject("companyList", companyService.getAllCompany());
-		myModel.addObject("message", "Ajout éfféctué");
+		if (result.hasErrors()) {
+			myModel.setViewName("addComputer");
+			myModel.addObject("companyList", companyService.getAllCompany());
+			m.addAttribute("computerDto", new ComputerDTO());
+			myModel.addObject("message", result.getAllErrors());
+
+		} else {
+			logger.info("Adding computer");
+			
+			ComputerDTO cDto = new ComputerDTO();
+			Computer computer = cDto.fromDto(computerDto);
+	
+			computerService.addComputer(computer.getName(), computer.getIntroduced().toString(), computer.getDiscontinued().toString(),computer.getCompany().getId());
+			
+			m.addAttribute("computerDto", new ComputerDTO());
+			myModel.setViewName("addComputer");
+			myModel.addObject("companyList", companyService.getAllCompany());
+			myModel.addObject("message", "Ajout éfféctué");
+			
+		}
 		return myModel;
 	}
 	
@@ -118,4 +174,5 @@ public class ComputerController {
 		myModel.addObject("computerList", computerService.findAll(search));
 		return myModel;
 	}
+
 }

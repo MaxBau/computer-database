@@ -3,7 +3,7 @@
  */
 	function validForm()
 	{
-		if (($("#nameInput").val()!="")&&($("#introducedInput").val()!="")&&($("#discontinuedInput").val()!="")) {
+		/*if (($("#nameInput").val()!="")&&($("#introducedInput").val()!="")&&($("#discontinuedInput").val()!="")) {
 			if ((validDate($("#introducedInput").val()))&&(validDate($("#discontinuedInput").val()))) {
 				$("#formAdd").submit();
 			}
@@ -13,7 +13,8 @@
 		}
 		else {
 			$("#message").html("Au moins un des champs est vide...");
-		}
+		}*/
+		$("#formAdd").submit();
 	}
 	
 	function validDate(date)

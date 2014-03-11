@@ -245,8 +245,7 @@ public class JdbcComputerDao implements ComputerDAO {
 	}
 	
 	private static class ComputerMapper implements RowMapper {
-		@Override
-        public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
             Computer prod = new Computer();
             prod.setId(rs.getInt("id"));
             prod.setName(rs.getString("name"));
@@ -263,7 +262,6 @@ public class JdbcComputerDao implements ComputerDAO {
 
 
 
-	@Override
 	public void add(String name, Date introducedDate, Date discontinuedDate,
 			long companyId) {
 		// TODO Auto-generated method stub
@@ -301,33 +299,28 @@ public class JdbcComputerDao implements ComputerDAO {
 	}
 
 	
-	@Override
 	public Computer create(Computer obj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Computer create(String name, Date introducedDate,
 			Date discontinuedDate, Company company) {
 		
 		return new Computer(name,introducedDate,discontinuedDate,company);
 	}
 
-	@Override
 	public Computer create(String name, Date introducedDate,
 			Date discontinuedDate, long companyId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Computer create(long id, String name, Date introducedDate,
 			Date discontinuedDate, Company company) {
 		return new Computer(id,name,introducedDate,discontinuedDate,company);
 	}
 
-	@Override
 	public List<Computer> findAll(String search) {
 		List<Computer> computers = new ArrayList<Computer>();
 		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%'";

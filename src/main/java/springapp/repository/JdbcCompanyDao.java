@@ -47,7 +47,6 @@ public class JdbcCompanyDao implements CompanyDAO {
 		return CompanyDAOHolder.instance;
 	}
 
-	@Override
 	public Company find(long id) {
 		String query = "SELECT * FROM company WHERE id="+id;
 		ResultSet results = null;
@@ -84,32 +83,27 @@ public class JdbcCompanyDao implements CompanyDAO {
 		return company;
 	}
 
-	@Override
 	public Company create(Connection connect,Company obj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Company update(Company obj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void delete(long id) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public List<Company> findAll(int limitMin, int limitMax,
 			String search, String order, String sens) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public List<Company> findAll() {
 		String query = "SELECT * FROM company ";
 		List<Company> companies = new ArrayList<Company>();
@@ -155,17 +149,14 @@ public class JdbcCompanyDao implements CompanyDAO {
 		return companies;
 	}
 
-	@Override
 	public int count() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	@Override
 	public Company create() {
 		
 		return new Company();
 	}
-	@Override
 	public Company create(long id) {
 		
 		return new Company(id);
