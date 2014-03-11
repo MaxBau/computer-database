@@ -16,4 +16,6 @@ public interface CompanyDAO {
 	public List<Company> findAll(int limitMin,int limitMax,String search,String order,String sens);
 	public List<Company> findAll();
 	public int count();
+	public Company create();
+	public Company create(long id);
 }

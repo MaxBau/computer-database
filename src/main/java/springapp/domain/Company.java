@@ -19,6 +19,11 @@ public class Company {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Company(long id) {
+		super();
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}

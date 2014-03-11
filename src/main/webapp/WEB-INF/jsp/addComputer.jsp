@@ -47,7 +47,7 @@ ${message}
 		</fieldset>
 		<div class="actions">
 				<a href="#" onclick="validForm();" class="btn primary">Add</a>
-					or <a href="Dashboard" class="btn">Cancel</a>
+					or <a href="dashboard" class="btn">Cancel</a>
 		</div>
 	</form>
 </section>

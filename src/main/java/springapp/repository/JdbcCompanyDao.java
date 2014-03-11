@@ -160,6 +160,16 @@ public class JdbcCompanyDao implements CompanyDAO {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public Company create() {
+		
+		return new Company();
+	}
+	@Override
+	public Company create(long id) {
+		
+		return new Company(id);
+	}
 	
 //	@Override
 //	public Company create(Company obj) {

@@ -31,6 +31,13 @@ public class CompanyService {
 		return company.findAll();
 	}
 
+	public Company create() {
+		return company.create();
+	}
+	
+	public Company create(long id) {
+		return company.create(id);
+	}
 //	
 //	private static class CompanyServiceHolder
 //	{

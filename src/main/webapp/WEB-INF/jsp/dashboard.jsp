@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%-- <%@ taglib uri="/WEB-INF/paginatorTaglib.tld" prefix="pag" %> --%>
+<%-- <%@ taglib uri="/WEB-INF/lib/paginatorTaglib.tld" prefix="pag" %> --%>
 <%@ page isELIgnored="false" %>
 
 
@@ -12,7 +12,7 @@
 	<h1 id="homeTitle">${computerCount} Computers found</h1>
 <%-- 	${ComputerBean} --%>
 	<div id="actions">
-		<form action="Dashboard" method="GET">
+		<form action="search" method="GET">
 			<input type="search" id="searchbox" name="search"
 				value="${sessionScope['search']}" placeholder="Search name">
 			<input type="submit" id="searchsubmit"
@@ -39,11 +39,11 @@
 			<tbody>
 			<c:forEach var="computer" items="${computerList}">
 				<tr>
-					<td><a href="EditComputer?id=${computer.id}&action=edit" onclick="">${computer.name}</a></td>
+					<td><a href="editComputerForm?id=${computer.id}" onclick="">${computer.name}</a></td>
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name }</td>
-					<td><a href="EditComputer?action=delete&id=${computer.id}" class="btn danger">Delete</a>
+					<td><a href="deleteComputer?id=${computer.id}" class="btn danger">Delete</a>
 				</tr>
 			</c:forEach>
 			</tbody>

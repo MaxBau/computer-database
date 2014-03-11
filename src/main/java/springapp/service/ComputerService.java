@@ -1,11 +1,14 @@
 package springapp.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import springapp.domain.Company;
 import springapp.domain.Computer;
 import springapp.repository.JdbcComputerDao;
 
@@ -29,9 +32,72 @@ public class ComputerService {
 		return computer.findAll();
 	}
 	
-	public void addComputer(String name, Date introducedDate, Date discontinuedDate, long companyId) {
-		computer.create(name, introducedDate, discontinuedDate, companyId);
+	public void addComputer(String name, String introducedDate, String discontinuedDate, long companyId) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
+		Date introducedSubmit = new Date();
+		Date discontinuedSubmit = new Date();
+		try {
+			//TODO Conversions dates
+			introducedSubmit = sdf.parse(introducedDate);
+			discontinuedSubmit = sdf.parse(discontinuedDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		computer.add(name, introducedSubmit, discontinuedSubmit, companyId);
+		
+	}
+	
+	public Computer getComputerById(long id) {
+		return computer.find(id);
+	}
+	
+	public Computer create(String name, String introduced, String discontinued, Company company) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date introducedSubmit = new Date();
+		Date discontinuedSubmit = new Date();
+		try {
+			//TODO Conversions dates
+			introducedSubmit = sdf.parse(introduced);
+			discontinuedSubmit = sdf.parse(discontinued);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return computer.create(name, introducedSubmit, discontinuedSubmit, company);
+	}
+	
+	public Computer create(long id,String name, String introduced, String discontinued, Company company) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date introducedSubmit = new Date();
+		Date discontinuedSubmit = new Date();
+		try {
+			//TODO Conversions dates
+			introducedSubmit = sdf.parse(introduced);
+			discontinuedSubmit = sdf.parse(discontinued);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return computer.create(id, name, introducedSubmit, discontinuedSubmit, company);
+	}
+	
+
+	public void update(Computer obj) {
+
+		computer.update(obj);
+	}
+	
+	public void deleteComputer(long id) {
+		computer.delete(id);
+	}
+	
+	public List<Computer> findAll(String search) {
+		return computer.findAll(search);
 	}
 //
 //	private static class ComputerServiceHolder
@@ -48,6 +114,7 @@ public class ComputerService {
 //		return computerDAO.findAll(limitMin,limitMax,search,order,sens);
 //	}
 //	
+
 
 //	
 //	public void createComputer(Computer obj) {
@@ -73,18 +140,14 @@ public class ComputerService {
 //		}
 //	}
 //	
-//	public Computer getComputerById(long id) {
-//		return computerDAO.find(id);
-//	}
+
 //
 //	public Computer updateComputer(Computer computer) {
 //		// TODO Auto-generated method stub
 //		return computerDAO.update(computer);
 //	}
 //	
-//	public void deleteComputer(long id) {
-//		computerDAO.delete(id);
-//	}
+
 //	
 //	public int countComputer() {
 //		return computerDAO.count();

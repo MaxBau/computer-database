@@ -2,14 +2,15 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <jsp:include page="../lib/header.jsp" />
-<script type="text/javascript" src="validFormAdd.js">
+<script type="text/javascript" src="<c:url value="/js/validFormAdd.js" />"></script>
+<%@ page isELIgnored="false" %>
 
 </script>
 <section id="main">
 ${message}
 	<h1>Edit Computer</h1>
 	<div id="message"></div>
-	<form action="EditComputer" id="formAdd" method="POST">
+	<form action="editComputer" id="formAdd" method="POST">
 		<fieldset>
 		<div class="clearfix">
 				<label for="id">Computer id:</label>
@@ -45,7 +46,7 @@ ${message}
 				<div class="input">
 					<select name="company" id="companyInput">
 						<option value="0">--</option>
-						<c:forEach var="company" items="${requestScope['companies']}">
+						<c:forEach var="company" items="${companyList}">
 							<option value="${company.id}" ${company.id == computer.company.id ? 'selected' : ''}>${company.name}</option>
 						</c:forEach>
 					</select>
@@ -54,7 +55,7 @@ ${message}
 		</fieldset>
 		<div class="actions">
 			<a href="#" onclick="validForm();" class="btn primary">Edit</a>
-			or <a href="Dashboard" class="btn">Cancel</a> or <a href="EditComputer?action=delete&id=${computer.id}" class="btn">Delete</a>
+			or <a href="dashboard" class="btn">Cancel</a>
 		</div>
 	</form>
 </section>
