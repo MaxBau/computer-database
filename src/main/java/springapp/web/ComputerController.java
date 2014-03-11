@@ -107,10 +107,14 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(value="/editComputerForm",method = RequestMethod.GET)
-	public ModelAndView editComputerForm(@Valid ComputerDTO computerDto,BindingResult result,Model m,final RedirectAttributes redirectAttributes) {
+	public ModelAndView editComputerForm(@RequestParam(required=false) long id,Model m) {
+		logger.info("Displaying edit Form");
 		ModelAndView myModel = new ModelAndView();
+		ComputerDTO cDto = new ComputerDTO();
 		myModel.setViewName("editComputer");
-		myModel.addObject("computer", computerService.getComputerById(computerDto.getId()));
+		
+		myModel.addObject("computer", cDto.toDto(computerService.getComputerById(id)));
+		m.addAttribute("computerDto", cDto);
 		myModel.addObject("companyList", companyService.getAllCompany());
 		return myModel;
 	}

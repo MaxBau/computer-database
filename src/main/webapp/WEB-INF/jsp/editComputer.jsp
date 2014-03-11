@@ -48,7 +48,7 @@ ${message}
 					<select name="company" id="companyInput">
 						<option value="0">--</option>
 						<c:forEach var="company" items="${companyList}">
-							<option value="${company.id}" ${company.id == computer.company.id ? 'selected' : ''}>${company.name}</option>
+							<option value="${company.id}" ${company.id == computer.companyId ? 'selected' : ''}>${company.name}</option>
 						</c:forEach>
 					</select>
 				</div>

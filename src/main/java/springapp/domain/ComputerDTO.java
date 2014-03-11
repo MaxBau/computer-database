@@ -87,8 +87,13 @@ public class ComputerDTO {
 		dto.setName(computer.getName());
 		dto.setIntroduced(computer.getIntroduced());
 		dto.setDiscontinued(computer.getDiscontinued());
-		dto.setCompanyId(computer.getCompany().getId());
-		dto.setCompanyName(computer.getCompany().getName());
+		if (computer.getCompany()!=null) {
+			dto.setCompanyId(computer.getCompany().getId());
+			dto.setCompanyName(computer.getCompany().getName());
+		} else {
+			dto.setCompanyId(0);
+			dto.setCompanyName(" ");
+		}
 		
 		return dto;
 	}
