@@ -2,18 +2,20 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page isELIgnored="false" %>
 <jsp:include page="../lib/header.jsp" />
 <script type="text/javascript" src="<c:url value="/js/validFormAdd.js" />"></script>
 
 <section id="main">
+Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 ${message}
-	<h1>Add Computer</h1>
+	<h1><spring:message code="page.title.add" text="default text" /></h1>
 	<div id="message"></div>
 	<form:form action="addComputer" commandName="addComputer" modelAttribute="computerDto" id="formAdd" method="POST">
 		<fieldset>
 			<div class="clearfix">
-				<label for="name">Computer name:</label>
+				<label for="name"><spring:message code="label.name" text="default text" /></label>
 				<div class="input">
 					<form:input id="nameInput" path="name" />
 					<form:errors path="name" cssstyle="color: red;" />
@@ -22,7 +24,7 @@ ${message}
 			</div>
 	
 			<div class="clearfix">
-				<label for="introduced">Introduced date:</label>
+				<label for="introduced"><spring:message code="label.introduced" text="default text" /></label>
 				<div class="input">
 					<form:input type="date" id="introducedInput" path="introduced" />
 					<form:errors path="introduced" cssstyle="color: red;" />
@@ -30,7 +32,7 @@ ${message}
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="discontinued">Discontinued date:</label>
+				<label for="discontinued"><spring:message code="label.discontinued" text="default text" /></label>
 				<div class="input">
 				<form:input type="date" id="discontinuedInput" path="discontinued" />
 				<form:errors path="discontinued" cssstyle="color: red;" />
@@ -38,7 +40,7 @@ ${message}
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="companyId">Company Name:</label>
+				<label for="companyId"><spring:message code="label.company" text="default text" /></label>
 				<div class="input">
 				<form:select id="companyInput" path="companyId" >
 					<form:errors path="companyId" cssstyle="color: red;" />
@@ -51,8 +53,8 @@ ${message}
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="Add" class="btn primary" />
-			or <a href="dashboard" class="btn">Cancel</a> 
+			<input type="submit" value="<spring:message code="button.add.title" text="default text" />" class="btn primary" />
+			or <a href="dashboard" class="btn"><spring:message code="button.cancel.title" text="default text" /></a> 
 		</div>
 	</form:form>
 </section>

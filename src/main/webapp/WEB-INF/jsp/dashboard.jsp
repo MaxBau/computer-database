@@ -1,25 +1,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%-- <%@ taglib uri="/WEB-INF/lib/paginatorTaglib.tld" prefix="pag" %> --%>
 <%@ page isELIgnored="false" %>
 
 
 <jsp:include page="../lib/header.jsp" />
 
-
 <section id="main">
-	<h1 id="homeTitle">${computerCount} Computers found</h1>
+Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
+	<h1 id="homeTitle">${computerCount} <spring:message code="page.title.dashboard" text="default text" /></h1>
+	
+	
 <%-- 	${ComputerBean} --%>
 	<div id="actions">
 		<form action="search" method="GET">
-			<input type="search" id="searchbox" name="search"
+			<input type="search" id="searchbox" name="<spring:message code="field.search" text="default text" />"
 				value="${sessionScope['search']}" placeholder="Search name">
 			<input type="submit" id="searchsubmit"
-				value="Filter by name"
+				value="<spring:message code="button.filter.title" text="default text" />"
 				class="btn primary">
 		</form>
-		<a class="btn success" id="add" href="addComputerForm">Add Computer</a>
+		<a class="btn success" id="add" href="addComputerForm"><spring:message code="button.addComputer.title" text="default text" /></a>
 	</div>
 
 		<table class="computers zebra-striped">
@@ -27,12 +30,12 @@
 				<tr>
 					<!-- Variable declarations for passing labels as parameters -->
 					<!-- Table header for Computer Name -->
-					<th><a href="Dashboard?order=name">Computer Name</a></th>
-					<th><a href="Dashboard?order=introduced">Introduced Date</a></th>
+					<th><a href="Dashboard?order=name"><spring:message code="table.header.name" text="default text" /></a></th>
+					<th><a href="Dashboard?order=introduced"><spring:message code="table.header.introduced" text="default text" /></a></th>
 					<!-- Table header for Discontinued Date -->
-					<th><a href="Dashboard?order=discontinued">Discontinued Date</a></th>
+					<th><a href="Dashboard?order=discontinued"><spring:message code="table.header.discontinued" text="default text" /></a></th>
 					<!-- Table header for Company -->
-					<th><a href="Dashboard?order=company.name">Company</a></th>
+					<th><a href="Dashboard?order=company.name"><spring:message code="table.header.company" text="default text" /></a></th>
 					<th> </th>
 				</tr>
 			</thead>
@@ -43,7 +46,7 @@
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
 					<td>${computer.company.name }</td>
-					<td><a href="deleteComputer?id=${computer.id}" class="btn danger">Delete</a>
+					<td><a href="deleteComputer?id=${computer.id}" class="btn danger"><spring:message code="button.delete.title" text="default text" /></a>
 				</tr>
 			</c:forEach>
 			</tbody>

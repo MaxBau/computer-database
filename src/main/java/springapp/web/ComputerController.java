@@ -50,8 +50,6 @@ public class ComputerController {
 	public void setValidator(FormValidator validator) {
 		this.validator = validator;
 	}
-
-	
 	
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {  
@@ -80,21 +78,6 @@ public class ComputerController {
 		m.addAttribute("computerDto", new ComputerDTO());
 		return myModel;
 	}
-
-//	@RequestMapping(value="/addComputer",method = RequestMethod.POST)
-//	public ModelAndView addComputer(@RequestParam(value="name",required=false) String name,
-//									@RequestParam(value="introducedDate",required=false) String introducedDate,
-//									@RequestParam(value = "discontinuedDate",required=false) String discontinuedDate,
-//									@RequestParam(value="company",required=false) long company) {
-//		logger.info("Adding computer");
-//		ModelAndView myModel = new ModelAndView();
-//		computerService.addComputer(name, introducedDate, discontinuedDate,company);
-//		
-//		myModel.setViewName("addComputer");
-//		myModel.addObject("companyList", companyService.getAllCompany());
-//		myModel.addObject("message", "Ajout éfféctué");
-//		return myModel;
-//	}
 	
 	@RequestMapping(value="/addComputer",method = RequestMethod.POST)
 	public ModelAndView addComputer(@Valid ComputerDTO computerDto,BindingResult result,Model m,final RedirectAttributes redirectAttributes) {
@@ -124,10 +107,10 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(value="/editComputerForm",method = RequestMethod.GET)
-	public ModelAndView editComputerForm(@RequestParam(value="id",required=false) long computerId) {
+	public ModelAndView editComputerForm(@Valid ComputerDTO computerDto,BindingResult result,Model m,final RedirectAttributes redirectAttributes) {
 		ModelAndView myModel = new ModelAndView();
 		myModel.setViewName("editComputer");
-		myModel.addObject("computer", computerService.getComputerById(computerId));
+		myModel.addObject("computer", computerService.getComputerById(computerDto.getId()));
 		myModel.addObject("companyList", companyService.getAllCompany());
 		return myModel;
 	}
