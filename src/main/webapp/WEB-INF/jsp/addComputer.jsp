@@ -18,7 +18,7 @@ ${message}
 				<label for="name"><spring:message code="label.name" text="default text" /></label>
 				<div class="input">
 					<form:input id="nameInput" path="name" />
-					<form:errors path="name" cssstyle="color: red;" />
+					<form:errors path="name" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
@@ -27,7 +27,7 @@ ${message}
 				<label for="introduced"><spring:message code="label.introduced" text="default text" /></label>
 				<div class="input">
 					<form:input type="date" id="introducedInput" path="introduced" />
-					<form:errors path="introduced" cssstyle="color: red;" />
+					<form:errors path="introduced" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
@@ -35,7 +35,7 @@ ${message}
 				<label for="discontinued"><spring:message code="label.discontinued" text="default text" /></label>
 				<div class="input">
 				<form:input type="date" id="discontinuedInput" path="discontinued" />
-				<form:errors path="discontinued" cssstyle="color: red;" />
+				<form:errors path="discontinued" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
@@ -43,12 +43,13 @@ ${message}
 				<label for="companyId"><spring:message code="label.company" text="default text" /></label>
 				<div class="input">
 				<form:select id="companyInput" path="companyId" >
-					<form:errors path="companyId" cssstyle="color: red;" />
+					
 						<form:option value="0">--</form:option>
 						<c:forEach var="company" items="${companyList}">
 							<form:option value="${company.id}">${company.name}</form:option>
 						</c:forEach>
 					</form:select>
+					<form:errors path="companyId" cssstyle="color: red;" ></form:errors>
 				</div>
 			</div>
 		</fieldset>

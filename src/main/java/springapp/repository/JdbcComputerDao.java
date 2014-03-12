@@ -102,7 +102,7 @@ public class JdbcComputerDao implements ComputerDAO {
 		
 		Connection connect = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
 			connect = dataSource.getConnection();
 			stmt =  connect.prepareStatement(query);
@@ -225,22 +225,7 @@ public class JdbcComputerDao implements ComputerDAO {
 					e.printStackTrace();
 				}
 			}
-			
-//		  String sql = "select id, name,introduced,discontinued,company_id from computer";
-//		  //BeanPropertyRowMapper<Computer> bprm = new BeanPropertyRowMapper<Computer>(Computer.class);
-//		  
-//		  List<Computer> computers = new ArrayList<Computer>();
-//		  //STOP JDBC Template !!!
-//		  List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
-//		  for (Map row : rows) {
-//				Computer customer = new Computer();
-//				customer.setId((Long)(row.get("id")));
-//				customer.setName((String)row.get("name"));
-//				//customer.setAge((Integer)row.get("AGE"));
-//				computers.add(customer);
-//			}
-////	      List<Computer> products = (List<Computer>)getJdbcTemplate().query(sql,cm);
-//	      
+      
 	      return computers;
 	}
 	

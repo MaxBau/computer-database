@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import springapp.domain.Computer;
 import springapp.domain.ComputerDTO;
@@ -51,13 +52,13 @@ public class ComputerController {
 		this.validator = validator;
 	}
 	
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {  
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	    sdf.setLenient(true);
-	    binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
-	    binder.addValidators(validator);  
-	} 
+//	@InitBinder
+//	private void initBinder(WebDataBinder binder) {  
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//	    sdf.setLenient(true);
+//	    binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+//	    binder.addValidators(validator);  
+//	} 
 	
 	@RequestMapping("/dashboard")
 	public ModelAndView listComputers() {
@@ -69,7 +70,7 @@ public class ComputerController {
 	    return myModel;
 	}
 	
-	@RequestMapping("/addComputerForm")
+	@RequestMapping(value="/addComputerForm",method=RequestMethod.GET)
 	public ModelAndView addComputerForm(Model m) {
 		ModelAndView myModel = new ModelAndView();
 		myModel.setViewName("addComputer");
@@ -80,14 +81,19 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(value="/addComputer",method = RequestMethod.POST)
-	public ModelAndView addComputer(@Valid ComputerDTO computerDto,BindingResult result,Model m,final RedirectAttributes redirectAttributes) {
+	public ModelAndView addComputer(@Valid ComputerDTO computerDto,BindingResult result,Model m) {
 		ModelAndView myModel = new ModelAndView();
 		
 		if (result.hasErrors()) {
+			
 			myModel.setViewName("addComputer");
 			myModel.addObject("companyList", companyService.getAllCompany());
 			m.addAttribute("computerDto", new ComputerDTO());
 			myModel.addObject("message", result.getAllErrors());
+			
+//			myModel.addObject("errorName",result.getFieldError("name").getDefaultMessage());
+//			myModel.addObject("errorIntroduced",result.getFieldError("introduced").getDefaultMessage());
+//			myModel.addObject("errorDiscontinued",result.getFieldError("discontinued").getDefaultMessage());
 
 		} else {
 			logger.info("Adding computer");
@@ -112,6 +118,7 @@ public class ComputerController {
 		ModelAndView myModel = new ModelAndView();
 		ComputerDTO cDto = new ComputerDTO();
 		myModel.setViewName("editComputer");
+		
 		
 		myModel.addObject("computer", cDto.toDto(computerService.getComputerById(id)));
 		m.addAttribute("computerDto", cDto);

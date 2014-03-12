@@ -2,13 +2,18 @@ package springapp.domain;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ComputerDTO {
 	private long id;
+	@NotNull
 	private String name;
+	@NotNull
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date introduced;
+	@NotNull
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date discontinued;
 	private long companyId;
