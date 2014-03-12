@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class JdbcComputerDao implements ComputerDAO {
+public class JdbcComputerDao {
 
 	
 	public JdbcComputerDao() {

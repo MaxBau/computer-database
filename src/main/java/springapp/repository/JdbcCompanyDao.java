@@ -17,7 +17,7 @@ import springapp.domain.Company;
 
 @Repository
 @Transactional
-public class JdbcCompanyDao implements CompanyDAO {
+public class JdbcCompanyDao {
 	@Autowired
 	Company company;
 	@Autowired
