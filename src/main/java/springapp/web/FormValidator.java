@@ -11,6 +11,11 @@ import springapp.domain.ComputerDTO;
 @Component
 public class FormValidator implements Validator {
 
+	
+	public FormValidator() {
+		super();
+	}
+
 	public boolean supports(Class<?> arg0) {
 		return ComputerDTO.class.isAssignableFrom(arg0);  
 	

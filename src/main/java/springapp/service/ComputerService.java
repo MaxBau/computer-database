@@ -5,29 +5,29 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import springapp.domain.Company;
 import springapp.domain.Computer;
 import springapp.repository.JdbcComputerDao;
-
 @Service
+@Transactional
 public class ComputerService {
+	@Autowired
 	private JdbcComputerDao computer;
 	
-	private ComputerService()
-	{}
+	public ComputerService()
+	{
+		super();
+	}
 	
-	public JdbcComputerDao getComputer() {
-		return computer;
-	}
-	@Autowired
-	public void setComputer(JdbcComputerDao computer) {
-		this.computer = computer;
-	}
-
 	public List<Computer> getAllComputers()
 	{
 		return computer.findAll();
+	}
+	
+	public List<Computer> findAll(String search,String order,String sens) {
+		return computer.findAll(search,order,sens);
 	}
 	
 	public void addComputer(String name, String introducedDate, String discontinuedDate, long companyId) {

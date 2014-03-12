@@ -5,7 +5,8 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
+import org.springframework.stereotype.Component;
+@Component
 public class ComputerDTO {
 	private long id;
 	@NotNull

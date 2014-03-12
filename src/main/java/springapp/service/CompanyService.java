@@ -4,23 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import springapp.domain.Company;
 import springapp.repository.JdbcCompanyDao;
-
 @Service
+@Transactional
 public class CompanyService {
+	@Autowired
 	JdbcCompanyDao company ;
 	
-	private CompanyService()
-	{}
-	
-	public JdbcCompanyDao getCompany() {
-		return company;
-	}
-	@Autowired
-	public void setCompany(JdbcCompanyDao company) {
-		this.company = company;
+	public CompanyService()
+	{
+		super();
 	}
 
 	public Company find(long id) {

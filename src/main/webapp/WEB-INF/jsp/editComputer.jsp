@@ -2,28 +2,31 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <jsp:include page="../lib/header.jsp" />
 <script type="text/javascript" src="<c:url value="/js/validFormAdd.js" />"></script>
 <%@ page isELIgnored="false" %>
 
 <section id="main">
-Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
+Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a><br>
 ${message}
 	<h1><spring:message code="page.title.edit" text="default text" /></h1>
 	<div id="message"></div>
-	<form action="editComputer" id="formAdd" method="POST">
+	<form:form action="editComputer" commandName="addComputer" modelAttribute="computerDto" id="formAdd" method="POST">
 		<fieldset>
 		<div class="clearfix">
 				<label for="id"><spring:message code="label.id" text="default text" /></label>
 				<div class="input">
-					<input type="text" name="id" value="${computer.id}" readonly/>
+					<form:input id="nameInput" path="id" value="${computer.id}" readonly="true"/>
+					<form:errors path="id" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="name"><spring:message code="label.name" text="default text" /></label>
 				<div class="input">
-					<input type="text" name="name" id="nameInput" value="${computer.name}" />
+					<form:input id="nameInput" path="name" value="${computer.name}" />
+					<form:errors path="name" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
@@ -31,26 +34,30 @@ ${message}
 			<div class="clearfix">
 				<label for="introduced"><spring:message code="label.introduced" text="default text" /></label>
 				<div class="input">
-					<input type="date" name="introducedDate" id="introducedInput" value="${computer.introduced}" />
+					<form:input type="date" id="introducedInput" value="${computer.introduced}" path="introduced" />
+					<form:errors path="introduced" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued"><spring:message code="label.discontinued" text="default text" /></label>
 				<div class="input">
-					<input type="date" name="discontinuedDate" id="discontinuedInput" value="${computer.discontinued}" />
+				<form:input type="date" id="discontinuedInput" value="${computer.discontinued}" path="discontinued" />
+				<form:errors path="discontinued" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
-				<label for="company"><spring:message code="label.company" text="default text" /></label>
+				<label for="companyId"><spring:message code="label.company" text="default text" /></label>
 				<div class="input">
-					<select name="company" id="companyInput">
-						<option value="0">--</option>
+				<form:select id="companyInput" path="companyId" >
+					
+						<form:option value="0">--</form:option>
 						<c:forEach var="company" items="${companyList}">
 							<option value="${company.id}" ${company.id == computer.companyId ? 'selected' : ''}>${company.name}</option>
 						</c:forEach>
-					</select>
+					</form:select>
+					<form:errors path="companyId" cssstyle="color: red;" ></form:errors>
 				</div>
 			</div>
 		</fieldset>
@@ -58,7 +65,7 @@ ${message}
 			<a href="#" onclick="validForm();" class="btn primary"><spring:message code="button.edit.title" text="default text" /></a>
 			or <a href="dashboard" class="btn"><spring:message code="button.cancel.title" text="default text" /></a>
 		</div>
-	</form>
+	</form:form>
 </section>
 
 <jsp:include page="../lib/footer.jsp" />

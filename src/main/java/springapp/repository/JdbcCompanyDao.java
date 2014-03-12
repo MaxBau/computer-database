@@ -11,32 +11,22 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import springapp.domain.Company;
 
 @Repository
+@Transactional
 public class JdbcCompanyDao implements CompanyDAO {
+	@Autowired
 	Company company;
+	@Autowired
 	DataSource dataSource;
 	
-	public Company getCompany() {
-		return company;
+	public JdbcCompanyDao()
+	{
+		super();
 	}
-	@Autowired
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = (DataSource) dataSource;
-	}
-
-	private JdbcCompanyDao()
-	{}
 	
 	private static class CompanyDAOHolder
 	{

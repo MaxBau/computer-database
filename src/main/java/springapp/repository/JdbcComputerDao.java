@@ -8,42 +8,31 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.sql.DataSource;
 
 import springapp.domain.Company;
 import springapp.domain.Computer;
-import springapp.service.CompanyService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class JdbcComputerDao implements ComputerDAO {
 
-//	private JdbcTemplate jdbcTemplate;
-//	
-//	public void setDataSource(DataSource dataSource) {
-//	        this.jdbcTemplate = new JdbcTemplate(dataSource);
-//	}
+	
+	public JdbcComputerDao() {
+		super();
+	}
 
+	@Autowired
 	DataSource dataSource;
-	CompanyService companyService;
-
-	@Autowired
-	public void setConnect(DataSource dataSource) {
-		this.dataSource= (DataSource) dataSource;
-	}
-
-	@Autowired
-	public void setCompanyService(CompanyService companyService) {
-		this.companyService = companyService;
-	}
 
 	public Computer find(long id) {
-		String query = "SELECT * FROM computer WHERE id=?";
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,company.id,company.name "
+				+ "FROM computer INNER JOIN company ON company.id=computer.company_id WHERE computer.id=?";
 		ResultSet results = null;
 		
 		Connection connect = null;
@@ -63,12 +52,10 @@ public class JdbcComputerDao implements ComputerDAO {
 				computer.setName(results.getString("name"));
 				computer.setIntroduced(results.getDate("introduced"));
 				computer.setDiscontinued(results.getDate("discontinued"));
-				
-				long company_id = results.getLong("company_id");
-				if (company_id!=0) {
-					Company company = companyService.find(company_id);
-					computer.setCompany(company);
-				}				
+				Company company = new Company();
+				company.setId(results.getLong("company.id"));
+				company.setName(results.getString("company.name"));
+				computer.setCompany(company);			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -120,9 +107,6 @@ public class JdbcComputerDao implements ComputerDAO {
 			stmt.setLong(5, obj.getId());
 			
 			stmt.executeUpdate();
-			System.out.println(stmt.toString());
-			System.out.println(connect.getWarnings());
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,16 +158,57 @@ public class JdbcComputerDao implements ComputerDAO {
 
 	}
 
-	public List<Computer> findAll(int limitMin, int limitMax, String search,
-			String order, String sens) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Computer> findAll(String search, String order, String sens) {
+		List<Computer> computers = new ArrayList<Computer>();
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%' ORDER BY "+order+" "+sens;
+		ResultSet results = null;
+		Connection connect = null;
+		Statement stmt = null;
+		try {
+			connect = dataSource.getConnection();
+			 stmt = connect.createStatement();
+			results = stmt.executeQuery(query);
+		
+		    
+		    while (results.next()) {
+		    	Computer computer = new Computer();
+				computer.setId(results.getLong("id"));
+				computer.setName(results.getString("name"));
+				computer.setIntroduced(results.getDate("introduced"));
+				computer.setDiscontinued(results.getDate("discontinued"));
+				Company company = new Company();
+				company.setId(results.getLong("company.id"));
+				company.setName(results.getString("company.name"));
+				computer.setCompany(company);			
+				computers.add(computer);
+			}
+
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+  
+      return computers;
 	}
 
 	public List<Computer> findAll() {
 		 
 		  List<Computer> computers = new ArrayList<Computer>();
-			String query = "SELECT id,name,introduced,discontinued,company_id FROM computer";
+			String query = "SELECT id,name,introduced,discontinued,company.id,company.name FROM computer "
+					+ "INNNER JOIN company ON company.id=computer.company_id";
 			ResultSet results = null;
 			Connection connect = null;
 			Statement stmt = null;
@@ -199,12 +224,11 @@ public class JdbcComputerDao implements ComputerDAO {
 					computer.setName(results.getString("name"));
 					computer.setIntroduced(results.getDate("introduced"));
 					computer.setDiscontinued(results.getDate("discontinued"));
-					
-					long company_id = results.getLong("company_id");
-					if (company_id!=0) {
-						Company company = companyService.find(company_id);
-						computer.setCompany(company);
-					}				
+					Company company = new Company();
+					company.setId(results.getLong("company.id"));
+					company.setName(results.getString("company.name"));
+					computer.setCompany(company);			
+					computers.add(computer);
 					computers.add(computer);
 				}
 
@@ -308,7 +332,9 @@ public class JdbcComputerDao implements ComputerDAO {
 
 	public List<Computer> findAll(String search) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%'";
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name "
+				+ "FROM computer LEFT JOIN company ON computer.company_id=company.id "
+				+ "WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%'";
 		ResultSet results = null;
 		
 		Connection connect = null;
@@ -325,12 +351,12 @@ public class JdbcComputerDao implements ComputerDAO {
 				computer.setName(results.getString("name"));
 				computer.setIntroduced(results.getDate("introduced"));
 				computer.setDiscontinued(results.getDate("discontinued"));
+				Company company = new Company();
+				company.setId(results.getLong("company.id"));
+				company.setName(results.getString("company.name"));
+				computer.setCompany(company);			
+				computers.add(computer);
 				
-				long company_id = results.getLong("company_id");
-				if (company_id!=0) {
-					Company company = companyService.find(company_id);
-					computer.setCompany(company);
-				}				
 				computers.add(computer);
 			}
 
@@ -358,6 +384,12 @@ public class JdbcComputerDao implements ComputerDAO {
 		}
 		
 		return computers;
+	}
+
+	public List<Computer> findAll(int limitMin, int limitMax, String search,
+			String order, String sens) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

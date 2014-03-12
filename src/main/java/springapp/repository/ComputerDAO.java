@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import springapp.domain.Company;
 import springapp.domain.Computer;
-@Repository
+
+
 public interface ComputerDAO {
 	public Computer find(long id);
 	public Computer create(Computer obj);

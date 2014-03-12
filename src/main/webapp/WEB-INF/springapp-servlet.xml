@@ -3,6 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:aop="http://www.springframework.org/schema/aop"
   xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
            http://www.springframework.org/schema/aop
@@ -10,7 +11,9 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-4.0.xsd
            http://www.springframework.org/schema/mvc 
-       	   http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+       	   http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+       	   http://www.springframework.org/schema/tx 
+       	   http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	<mvc:annotation-driven />
   <context:component-scan base-package="springapp" />
 	<!-- Internationalisation -->
@@ -18,12 +21,10 @@
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="en" />
 	</bean>
- 
 	<bean id="localeChangeInterceptor"
 		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 		<property name="paramName" value="lang" />
 	</bean>
- 
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" >
 		<property name="interceptors">
 		   <list>
@@ -31,7 +32,6 @@
 		   </list>
 		</property>
 	</bean>
-	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="welcome" />
@@ -49,13 +49,25 @@
 	    <property name="prefix" value="/WEB-INF/jsp/"/>
 	    <property name="suffix" value=".jsp"/>
 	</bean>
-	
+	  
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 	    <property name="url" value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull"/>
 	    <property name="username" value="root"/>
 	    <property name="password" value="root"/>
 	</bean>
+	<!-- 	Transactions -->
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	
+	
+	<bean id="transactionManager"
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+	</bean>
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+	
+
 	
 <mvc:resources mapping="/css/**" location="/WEB-INF/lib/css/" />
 <mvc:resources mapping="/js/**" location="/WEB-INF/lib/js/" />

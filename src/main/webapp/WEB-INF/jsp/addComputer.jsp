@@ -8,7 +8,7 @@
 <script type="text/javascript" src="<c:url value="/js/validFormAdd.js" />"></script>
 
 <section id="main">
-Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
+Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a><br>
 ${message}
 	<h1><spring:message code="page.title.add" text="default text" /></h1>
 	<div id="message"></div>

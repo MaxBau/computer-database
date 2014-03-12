@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import springapp.domain.Company;
 
-@Repository
+
 public interface CompanyDAO {
 	public Company find(long id);
 	public Company create(Connection connect, Company obj);

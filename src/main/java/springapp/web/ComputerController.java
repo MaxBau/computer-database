@@ -1,26 +1,18 @@
 package springapp.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.validation.Valid;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import springapp.domain.Computer;
 import springapp.domain.ComputerDTO;
@@ -30,28 +22,16 @@ import springapp.service.ComputerService;
 @Controller
 @RequestMapping("/computer")
 public class ComputerController {
-
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private static String sens="ASC";
 	
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired
 	ComputerService computerService;
+	@Autowired
 	CompanyService companyService;
+	@Autowired
 	FormValidator validator;
 
-	@Autowired
-	public void setCompanyService(CompanyService companyService) {
-		this.companyService = companyService;
-	}
-
-	@Autowired
-	public void setComputerService(ComputerService computerService) {
-		this.computerService = computerService;
-	}
-	
-	@Autowired
-	public void setValidator(FormValidator validator) {
-		this.validator = validator;
-	}
-	
 //	@InitBinder
 //	private void initBinder(WebDataBinder binder) {  
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,13 +40,19 @@ public class ComputerController {
 //	    binder.addValidators(validator);  
 //	} 
 	
-	@RequestMapping("/dashboard")
-	public ModelAndView listComputers() {
+	@RequestMapping(value="/dashboard",method={RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView listComputers(@RequestParam(value="search",defaultValue="") String search,
+										@RequestParam(value="order",defaultValue="computer.name") String order) {
 		
+		if (sens.equals("ASC")) {
+			sens="DESC";
+		} else {
+			sens="ASC";
+		}
 		logger.info("Returning dashboard view");
 		ModelAndView myModel = new ModelAndView();
 	    myModel.setViewName("dashboard");
-	    myModel.addObject("computerList", computerService.getAllComputers());
+	    myModel.addObject("computerList", computerService.findAll(search,order,sens));
 	    return myModel;
 	}
 	
@@ -90,18 +76,15 @@ public class ComputerController {
 			myModel.addObject("companyList", companyService.getAllCompany());
 			m.addAttribute("computerDto", new ComputerDTO());
 			myModel.addObject("message", result.getAllErrors());
-			
-//			myModel.addObject("errorName",result.getFieldError("name").getDefaultMessage());
-//			myModel.addObject("errorIntroduced",result.getFieldError("introduced").getDefaultMessage());
-//			myModel.addObject("errorDiscontinued",result.getFieldError("discontinued").getDefaultMessage());
 
 		} else {
 			logger.info("Adding computer");
 			
 			ComputerDTO cDto = new ComputerDTO();
 			Computer computer = cDto.fromDto(computerDto);
-	
-			computerService.addComputer(computer.getName(), computer.getIntroduced().toString(), computer.getDiscontinued().toString(),computer.getCompany().getId());
+			LocalDate introduced = new LocalDate(computer.getIntroduced());
+			LocalDate discontinued = new LocalDate(computer.getDiscontinued());
+			computerService.addComputer(computer.getName(), introduced.toString(), discontinued.toString(),computer.getCompany().getId());
 			
 			m.addAttribute("computerDto", new ComputerDTO());
 			myModel.setViewName("addComputer");
@@ -117,32 +100,36 @@ public class ComputerController {
 		logger.info("Displaying edit Form");
 		ModelAndView myModel = new ModelAndView();
 		ComputerDTO cDto = new ComputerDTO();
-		myModel.setViewName("editComputer");
-		
-		
+		myModel.setViewName("editComputer");		
 		myModel.addObject("computer", cDto.toDto(computerService.getComputerById(id)));
 		m.addAttribute("computerDto", cDto);
 		myModel.addObject("companyList", companyService.getAllCompany());
+		
 		return myModel;
 	}
 	
 	@RequestMapping(value="/editComputer",method = RequestMethod.POST)
-	public ModelAndView editComputer(@RequestParam(required=false) long id,
-			@RequestParam(required=false) String name,
-			@RequestParam(required=false) String introducedDate,
-			@RequestParam(required=false) String discontinuedDate,
-			@RequestParam(required=false) long company) {
-		logger.info("Editing computer");
+	public ModelAndView editComputer(@Valid ComputerDTO computerDto,BindingResult result,Model m) {
 		ModelAndView myModel = new ModelAndView();
-
-		Computer computer = computerService.create(id,name, introducedDate, discontinuedDate, companyService.find(company));
-		computerService.update(computer);
 		
-		myModel.setViewName("editComputer");
-		myModel.addObject("computer", computer);
-		myModel.addObject("companyList", companyService.getAllCompany());
-		myModel.addObject("message", "Modification éfféctuée");
-		
+		if (result.hasErrors()) {
+			myModel.setViewName("editComputer");
+			myModel.addObject("companyList", companyService.getAllCompany());
+			m.addAttribute("computerDto", new ComputerDTO());
+			myModel.addObject("message", result.getAllErrors());
+		} else {
+			logger.info("Editing computer");
+			
+			ComputerDTO cDto = new ComputerDTO();
+			Computer computer = cDto.fromDto(computerDto);
+			
+			computerService.update(computer);
+			m.addAttribute("computerDto", cDto);
+			myModel.setViewName("editComputer");
+			myModel.addObject("computer", computerDto);
+			myModel.addObject("companyList", companyService.getAllCompany());
+			myModel.addObject("message", "Modification éfféctuée");
+		}
 		return myModel;
 	}
 	
