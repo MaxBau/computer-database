@@ -12,13 +12,13 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a><br>
 ${message}
 	<h1><spring:message code="page.title.add" text="default text" /></h1>
 	<div id="message"></div>
-	<form:form action="addComputer" commandName="addComputer" modelAttribute="computerDto" id="formAdd" method="POST">
+	<form:form action="addComputer" modelAttribute="computerDto" id="formAdd" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name"><spring:message code="label.name" text="default text" /></label>
 				<div class="input">
 					<form:input id="nameInput" path="name" />
-					<form:errors path="name" cssstyle="color: red;"></form:errors>
+					<form:errors path="name" cssstyle="color: red;" />
 					<span class="help-inline">Required</span>
 				</div>
 			</div>
@@ -26,16 +26,16 @@ ${message}
 			<div class="clearfix">
 				<label for="introduced"><spring:message code="label.introduced" text="default text" /></label>
 				<div class="input">
-					<form:input type="date" id="introducedInput" path="introduced" />
-					<form:errors path="introduced" cssstyle="color: red;"></form:errors>
+					<form:input type="date" id="introducedInput" path="introduced" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" />
+					<form:errors path="introduced" cssstyle="color: red;" />
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
 			<div class="clearfix">
 				<label for="discontinued"><spring:message code="label.discontinued" text="default text" /></label>
 				<div class="input">
-				<form:input type="date" id="discontinuedInput" path="discontinued" />
-				<form:errors path="discontinued" cssstyle="color: red;"></form:errors>
+				<form:input type="date" id="discontinuedInput" path="discontinued" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" />
+				<form:errors path="discontinued" cssstyle="color: red;" />
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
 			</div>
@@ -49,7 +49,7 @@ ${message}
 							<form:option value="${company.id}">${company.name}</form:option>
 						</c:forEach>
 					</form:select>
-					<form:errors path="companyId" cssstyle="color: red;" ></form:errors>
+					<form:errors path="companyId" cssstyle="color: red;" />
 				</div>
 			</div>
 		</fieldset>

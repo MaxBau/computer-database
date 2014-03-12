@@ -6,7 +6,7 @@
 	      <tlib-version>1.0</tlib-version>
 	      <tag>
 		      <name>Paginator</name>
-		      <tag-class>/src/main/java/taglibs.Paginator</tag-class>
+		      <tag-class>taglibs.Paginator</tag-class>
 		      <body-content>empty</body-content>
 		      <attribute>
 		      	<name>itemsPerPage</name>
@@ -15,6 +15,11 @@
 		      </attribute>
 		      <attribute>
 		      	<name>collectionSize</name>
+		      	<required>true</required>
+		      	<rtexprvalue>true</rtexprvalue>
+		      </attribute>
+		      <attribute>
+		      	<name>search</name>
 		      	<required>true</required>
 		      	<rtexprvalue>true</rtexprvalue>
 		      </attribute>

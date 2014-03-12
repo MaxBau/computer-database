@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import springapp.domain.Company;
 import springapp.domain.Computer;
+import springapp.domain.WrapperListInt;
 import springapp.repository.JdbcComputerDao;
 @Service
 @Transactional
@@ -26,8 +27,11 @@ public class ComputerService {
 		return computer.findAll();
 	}
 	
-	public List<Computer> findAll(String search,String order,String sens) {
-		return computer.findAll(search,order,sens);
+	@Transactional
+	public WrapperListInt findAll(String search,String order,String sens,String limitMin, String limitMax) {
+		
+		WrapperListInt wrapper = new WrapperListInt(computer.findAll(search,order,sens,limitMin, limitMax),computer.count(search));
+		return wrapper;
 	}
 	
 	public void addComputer(String name, String introducedDate, String discontinuedDate, long companyId) {
@@ -45,7 +49,7 @@ public class ComputerService {
 		
 		LocalDate introducedSubmit = LocalDate.parse(introduced);
 		LocalDate discontinuedSubmit = LocalDate.parse(discontinued);
-		return computer.create(name, introducedSubmit.toDate(), discontinuedSubmit.toDate(), company);
+		return computer.create(name, introducedSubmit, discontinuedSubmit, company);
 	}
 	
 	public Computer create(long id,String name, String introduced, String discontinued, Company company) {
@@ -53,7 +57,7 @@ public class ComputerService {
 		LocalDate introducedSubmit = LocalDate.parse(introduced);
 		LocalDate discontinuedSubmit = LocalDate.parse(discontinued);
 		
-		return computer.create(id, name, introducedSubmit.toDate(), discontinuedSubmit.toDate(), company);
+		return computer.create(id, name, introducedSubmit, discontinuedSubmit, company);
 	}
 	
 

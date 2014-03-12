@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%-- <%@ taglib uri="/WEB-INF/lib/paginatorTaglib.tld" prefix="pag" %> --%>
+<%@ taglib uri="/WEB-INF/lib/paginatorTaglib.tld" prefix="pag" %>
 <%@ page isELIgnored="false" %>
 
 
@@ -17,7 +17,7 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 <%-- 	${ComputerBean} --%>
 	<div id="actions">
 		<form action="dashboard" method="POST">
-			<input type="text" name="search" id="searchbox" />
+			<input type="text" name="search" id="searchbox" value="${search}" />
 			<input type="submit" id="searchsubmit"
 				value="<spring:message code="button.filter.title" text="default text" />"
 				class="btn primary" />
@@ -51,7 +51,7 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 			</c:forEach>
 			</tbody>
 		</table>
-<%-- 		<pag:Paginator itemsPerPage="10" collectionSize="${computerCount}"></pag:Paginator> --%>
+		<pag:Paginator itemsPerPage="10" collectionSize="${computerCount}" search="${search}"></pag:Paginator>
 </section>
 
 <jsp:include page="../lib/footer.jsp" />

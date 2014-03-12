@@ -1,22 +1,21 @@
 package springapp.domain;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 @Component
 public class ComputerDTO {
 	private long id;
-	@NotNull
+	@NotEmpty
 	private String name;
 	@NotNull
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date introduced;
+	private LocalDate introduced;
 	@NotNull
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date discontinued;
+	private LocalDate discontinued;
 	private long companyId;
 	private String companyName;
 	
@@ -24,8 +23,8 @@ public class ComputerDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComputerDTO(long id, String name, Date introduced,
-			Date discontinued, long companyId, String companyName) {
+	public ComputerDTO(long id, String name, LocalDate introduced,
+			LocalDate discontinued, long companyId, String companyName) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -46,16 +45,16 @@ public class ComputerDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
-	public void setIntroduced(Date introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
-	public Date getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-	public void setDiscontinued(Date discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 	public long getCompanyId() {
