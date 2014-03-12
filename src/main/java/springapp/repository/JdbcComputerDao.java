@@ -32,9 +32,9 @@ public class JdbcComputerDao {
 
 	public Computer find(long id) {
 		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,company.id,company.name "
-				+ "FROM computer INNER JOIN company ON company.id=computer.company_id WHERE computer.id=?";
-		ResultSet results = null;
+				+ "FROM computer LEFT JOIN company ON company.id=computer.company_id WHERE computer.id=?";
 		
+		ResultSet results = null;
 		Connection connect = null;
 		Computer computer = null;
 		PreparedStatement stmt = null;
@@ -208,7 +208,7 @@ public class JdbcComputerDao {
 		 
 		  List<Computer> computers = new ArrayList<Computer>();
 			String query = "SELECT id,name,introduced,discontinued,company.id,company.name FROM computer "
-					+ "INNNER JOIN company ON company.id=computer.company_id";
+					+ "LEFT JOIN company ON company.id=computer.company_id";
 			ResultSet results = null;
 			Connection connect = null;
 			Statement stmt = null;

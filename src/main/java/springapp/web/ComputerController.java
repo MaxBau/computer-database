@@ -56,7 +56,7 @@ public class ComputerController {
 	    return myModel;
 	}
 	
-	@RequestMapping(value="/addComputerForm",method=RequestMethod.GET)
+	@RequestMapping(value="/addComputer*",method=RequestMethod.GET)
 	public ModelAndView addComputerForm(Model m) {
 		ModelAndView myModel = new ModelAndView();
 		myModel.setViewName("addComputer");
@@ -96,7 +96,7 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(value="/editComputerForm",method = RequestMethod.GET)
-	public ModelAndView editComputerForm(@RequestParam(required=false) long id,Model m) {
+	public ModelAndView editComputerForm(@RequestParam(required=false,defaultValue="0") long id,Model m) {
 		logger.info("Displaying edit Form");
 		ModelAndView myModel = new ModelAndView();
 		ComputerDTO cDto = new ComputerDTO();
