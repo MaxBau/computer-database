@@ -15,7 +15,9 @@
        	   http://www.springframework.org/schema/tx 
        	   http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	<mvc:annotation-driven />
-  <context:component-scan base-package="springapp" />
+  	<context:component-scan base-package="springapp" />
+  	<bean id="validator"
+    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 	<!-- Internationalisation -->
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
@@ -58,15 +60,11 @@
 	</bean>
 	<!-- 	Transactions -->
 	<!-- enable the configuration of transactional behavior based on annotations -->
-	
-	
 	<bean id="transactionManager"
 	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	<property name="dataSource" ref="dataSource"></property>
 	</bean>
   <tx:annotation-driven transaction-manager="transactionManager"/>
-
-	
 
 	
 <mvc:resources mapping="/css/**" location="/WEB-INF/lib/css/" />

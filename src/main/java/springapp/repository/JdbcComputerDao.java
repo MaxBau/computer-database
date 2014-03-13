@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,8 @@ import javax.sql.DataSource;
 
 import springapp.domain.Company;
 import springapp.domain.Computer;
+
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -50,8 +53,8 @@ public class JdbcComputerDao {
 			while (results.next()) {
 				computer.setId(results.getLong("id"));
 				computer.setName(results.getString("name"));
-				computer.setIntroduced(results.getDate("introduced"));
-				computer.setDiscontinued(results.getDate("discontinued"));
+				computer.setIntroduced(new LocalDate(results.getDate("introduced")));
+				computer.setDiscontinued(new LocalDate(results.getDate("discontinued")));
 				Company company = new Company();
 				company.setId(results.getLong("company.id"));
 				company.setName(results.getString("company.name"));
@@ -94,8 +97,8 @@ public class JdbcComputerDao {
 			connect = dataSource.getConnection();
 			stmt =  connect.prepareStatement(query);
 			stmt.setString(1, obj.getName());
-			stmt.setDate(2, new java.sql.Date(obj.getIntroduced().getTime()));
-			stmt.setDate(3, new java.sql.Date(obj.getDiscontinued().getTime()));
+			stmt.setTimestamp(2, new Timestamp(obj.getIntroduced().toDateTimeAtStartOfDay().getMillis()));
+			stmt.setTimestamp(3, new Timestamp(obj.getDiscontinued().toDateTimeAtStartOfDay().getMillis()));
 			
 			if (obj.getCompany().getId()!=0) {
 				stmt.setLong(4,obj.getCompany().getId());
@@ -158,9 +161,15 @@ public class JdbcComputerDao {
 
 	}
 
-	public List<Computer> findAll(String search, String order, String sens) {
+	public List<Computer> findAll(String search, String order, String sens,String limitMin,String limitMax) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%"+search+"%' OR company.name LIKE '%"+search+"%' ORDER BY "+order+" "+sens;
+		
+		if (order.equals(" ")) order="computer.name";
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name "
+				+ "FROM computer LEFT JOIN company ON computer.company_id=company.id "
+				+ "WHERE computer.name LIKE '%"+search+"%' "
+						+ "OR company.name LIKE '%"+search+"%' "
+								+ "ORDER BY "+order+" "+sens+" LIMIT "+limitMin+","+limitMax;
 		ResultSet results = null;
 		Connection connect = null;
 		Statement stmt = null;
@@ -174,8 +183,8 @@ public class JdbcComputerDao {
 		    	Computer computer = new Computer();
 				computer.setId(results.getLong("id"));
 				computer.setName(results.getString("name"));
-				computer.setIntroduced(results.getDate("introduced"));
-				computer.setDiscontinued(results.getDate("discontinued"));
+				computer.setIntroduced(new LocalDate(results.getDate("introduced")));
+				computer.setDiscontinued(new LocalDate(results.getDate("discontinued")));
 				Company company = new Company();
 				company.setId(results.getLong("company.id"));
 				company.setName(results.getString("company.name"));
@@ -222,8 +231,8 @@ public class JdbcComputerDao {
 			    	Computer computer = new Computer();
 					computer.setId(results.getLong("id"));
 					computer.setName(results.getString("name"));
-					computer.setIntroduced(results.getDate("introduced"));
-					computer.setDiscontinued(results.getDate("discontinued"));
+					computer.setIntroduced(new LocalDate(results.getDate("introduced")));
+					computer.setDiscontinued(new LocalDate(results.getDate("discontinued")));
 					Company company = new Company();
 					company.setId(results.getLong("company.id"));
 					company.setName(results.getString("company.name"));
@@ -264,9 +273,43 @@ public class JdbcComputerDao {
 
     }
 
-	public int count() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int count(String search) {
+		String query = "SELECT COUNT(computer.id) AS nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id "
+		+ "WHERE computer.name LIKE '%"+search+"%' "
+				+ "OR company.name LIKE '%"+search+"%'";
+						
+		ResultSet results = null;
+		Connection connect = null;
+		Statement stmt = null;
+		int nb = 0;
+		try {
+			connect = dataSource.getConnection();
+			stmt = connect.createStatement();
+			results = stmt.executeQuery(query);
+		    
+		    while (results.next()) {
+		    	nb=results.getInt("nbComputer");
+			}
+
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} finally {
+			if (connect!=null) {
+				try {
+					connect.close();
+				} catch (SQLException e) {}
+			}
+			
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+  
+		return nb;
 	}
 
 
@@ -313,8 +356,8 @@ public class JdbcComputerDao {
 		return null;
 	}
 
-	public Computer create(String name, Date introducedDate,
-			Date discontinuedDate, Company company) {
+	public Computer create(String name, LocalDate introducedDate,
+			LocalDate discontinuedDate, Company company) {
 		
 		return new Computer(name,introducedDate,discontinuedDate,company);
 	}
@@ -325,8 +368,8 @@ public class JdbcComputerDao {
 		return null;
 	}
 
-	public Computer create(long id, String name, Date introducedDate,
-			Date discontinuedDate, Company company) {
+	public Computer create(long id, String name, LocalDate introducedDate,
+			LocalDate discontinuedDate, Company company) {
 		return new Computer(id,name,introducedDate,discontinuedDate,company);
 	}
 
@@ -349,8 +392,8 @@ public class JdbcComputerDao {
 				Computer computer = new Computer();
 				computer.setId(results.getLong("id"));
 				computer.setName(results.getString("name"));
-				computer.setIntroduced(results.getDate("introduced"));
-				computer.setDiscontinued(results.getDate("discontinued"));
+				computer.setIntroduced(new LocalDate(results.getDate("introduced")));
+				computer.setDiscontinued(new LocalDate(results.getDate("discontinued")));
 				Company company = new Company();
 				company.setId(results.getLong("company.id"));
 				company.setName(results.getString("company.name"));

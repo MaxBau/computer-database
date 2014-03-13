@@ -10,14 +10,14 @@ public class Paginator extends TagSupport{
 	private int itemsPerPage =10;
 	private int limitMin=0;
 	private int collectionSize;
-	
+	private String search;
 	public int doStartTag() throws JspException
     {
 		int nbPages = collectionSize/itemsPerPage;
 		JspWriter out = pageContext.getOut();
-		for (int i = 0; i < nbPages; i++) {
+		for (int i = 0; i <= nbPages; i++) {
 			try {
-				out.write("<a href='Dashboard?limitmin="+(i*itemsPerPage)+"&limitmax="+itemsPerPage+"'>"+(i+1)+"</a> ");
+				out.write("<a href='dashboard?limitmin="+(i*itemsPerPage)+"&limitmax="+itemsPerPage+"&search="+search+"'>"+(i+1)+"</a> ");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -46,4 +46,14 @@ public class Paginator extends TagSupport{
 	public void setCollectionSize(int collectionSize) {
 		this.collectionSize = collectionSize;
 	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String lastSearch) {
+		this.search = lastSearch;
+	}
+	
+	
 }
