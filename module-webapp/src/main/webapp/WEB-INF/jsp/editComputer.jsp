@@ -17,7 +17,7 @@ ${message}
 		<div class="clearfix">
 				<label for="id"><spring:message code="label.id" text="default text" /></label>
 				<div class="input">
-					<form:input id="nameInput" path="id" value="${computer.id}" readonly="true"/>
+					<form:input id="nameInput" path="id" readonly="true"/>
 					<form:errors path="id" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">Required</span>
 				</div>
@@ -25,7 +25,7 @@ ${message}
 			<div class="clearfix">
 				<label for="name"><spring:message code="label.name" text="default text" /></label>
 				<div class="input">
-					<form:input id="nameInput" path="name" value="${computer.name}" />
+					<form:input id="nameInput" path="name"  />
 					<form:errors path="name" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">Required</span>
 				</div>
@@ -34,7 +34,7 @@ ${message}
 			<div class="clearfix">
 				<label for="introduced"><spring:message code="label.introduced" text="default text" /></label>
 				<div class="input">
-					<form:input type="date" id="introducedInput" value="${computer.introduced}" path="introduced" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"/>
+					<form:input type="date" id="introducedInput"  path="introduced" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"/>
 					<form:errors path="introduced" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
@@ -42,7 +42,7 @@ ${message}
 			<div class="clearfix">
 				<label for="discontinued"><spring:message code="label.discontinued" text="default text" /></label>
 				<div class="input">
-				<form:input type="date" id="discontinuedInput" value="${computer.discontinued}" path="discontinued" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"/>
+				<form:input type="date" id="discontinuedInput"  path="discontinued" pattern="^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"/>
 				<form:errors path="discontinued" cssstyle="color: red;"></form:errors>
 					<span class="help-inline">YYYY-MM-DD</span>
 				</div>
@@ -50,13 +50,7 @@ ${message}
 			<div class="clearfix">
 				<label for="companyId"><spring:message code="label.company" text="default text" /></label>
 				<div class="input">
-				<form:select id="companyInput" path="companyId" >
-					
-						<form:option value="0">--</form:option>
-						<c:forEach var="company" items="${companyList}">
-							<option value="${company.id}" ${company.id == computer.companyId ? 'selected' : ''}>${company.name}</option>
-						</c:forEach>
-					</form:select>
+				<form:select id="companyInput" path="companyId" items="${companyList}" itemLabel="name" itemValue="id" />
 					<form:errors path="companyId" cssstyle="color: red;" ></form:errors>
 				</div>
 			</div>

@@ -6,7 +6,7 @@
 		<artifactId>computer-db-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>module-service</artifactId>
+	<artifactId>module-persistence</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>excilys</groupId>
@@ -14,14 +14,24 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>excilys</groupId>
-			<artifactId>module-persistence</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>org.apache.directory.studio</groupId>
+			<artifactId>org.slf4j.api</artifactId>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
-			<groupId>excilys</groupId>
-			<artifactId>module-binding</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.6</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.0.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

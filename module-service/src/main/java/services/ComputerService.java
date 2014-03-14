@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import domain.Company;
 import domain.Computer;
 import domain.WrapperListInt;
+import dto.ComputerDTO;
 import repository.JdbcComputerDao;
 
 
@@ -35,15 +36,13 @@ public class ComputerService {
 		return wrapper;
 	}
 	
-	public void addComputer(String name, String introducedDate, String discontinuedDate, long companyId) {
-		LocalDate introducedSubmit = LocalDate.parse(introducedDate);
-		LocalDate discontinuedSubmit = LocalDate.parse(discontinuedDate);
-		
-		computer.add(name, introducedSubmit.toDate(), discontinuedSubmit.toDate(), companyId);
+	public void addComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId) {
+
+		computer.add(name, introduced, discontinued, companyId);
 	}
 	
-	public Computer getComputerById(long id) {
-		return computer.find(id);
+	public ComputerDTO getComputerById(long id) {
+		return new ComputerDTO().toDto(computer.find(id));
 	}
 	
 	public Computer create(String name, String introduced, String discontinued, Company company) {
@@ -62,9 +61,9 @@ public class ComputerService {
 	}
 	
 
-	public void update(Computer obj) {
+	public void update(ComputerDTO computerDto) {
 
-		computer.update(obj);
+		computer.update(new ComputerDTO().fromDto(computerDto));
 	}
 	
 	public void deleteComputer(long id) {

@@ -6,7 +6,7 @@
 		<artifactId>computer-db-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>module-service</artifactId>
+	<artifactId>module-binding</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>excilys</groupId>
@@ -14,23 +14,18 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>excilys</groupId>
-			<artifactId>module-persistence</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
 		</dependency>
 		<dependency>
-			<groupId>excilys</groupId>
-			<artifactId>module-binding</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>4.0.2.RELEASE</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.1.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
+			<artifactId>spring-core</artifactId>
 			<version>4.0.2.RELEASE</version>
 		</dependency>
 	</dependencies>

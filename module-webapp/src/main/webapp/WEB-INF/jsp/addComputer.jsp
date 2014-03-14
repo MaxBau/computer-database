@@ -42,13 +42,8 @@ ${message}
 			<div class="clearfix">
 				<label for="companyId"><spring:message code="label.company" text="default text" /></label>
 				<div class="input">
-				<form:select id="companyInput" path="companyId" >
-					
-						<form:option value="0">--</form:option>
-						<c:forEach var="company" items="${companyList}">
-							<form:option value="${company.id}">${company.name}</form:option>
-						</c:forEach>
-					</form:select>
+				<form:select id="companyInput" path="companyId" items="${companyList}" itemLabel="name" itemValue="id" />
+
 					<form:errors path="companyId" cssstyle="color: red;" />
 				</div>
 			</div>
