@@ -6,7 +6,7 @@
 	      <tlib-version>1.0</tlib-version>
 	      <tag>
 		      <name>Paginator</name>
-		      <tag-class>taglibs.Paginator</tag-class>
+		      <tag-class>views.Paginator</tag-class>
 		      <body-content>empty</body-content>
 		      <attribute>
 		      	<name>itemsPerPage</name>
