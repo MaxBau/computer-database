@@ -25,6 +25,8 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 	public boolean isValid(String object, ConstraintValidatorContext constraintContext) {
 
 		if (!object.matches(messageSource.getMessage("date.regexp", null, LocaleContextHolder.getLocale()))) {
+//			constraintContext.buildConstraintViolationWithTemplate("DateFormat");
+			
 			return false;
 		}
 		

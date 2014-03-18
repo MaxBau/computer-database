@@ -18,10 +18,10 @@ public class ComputerDTO implements MessageSourceAware{
 	@NotEmpty
 	private String name;
 	@NotEmpty
-	@DateFormat(message = "{DateFormat}")
+	@DateFormat
 	private String introduced;
 	@NotEmpty
-	@DateFormat(message = "{DateFormat}")
+	@DateFormat
 	private String discontinued;
 	private long companyId;
 	private String companyName;
