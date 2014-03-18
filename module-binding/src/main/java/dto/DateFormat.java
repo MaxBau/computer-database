@@ -19,7 +19,7 @@ import javax.validation.Payload;
 
 public @interface DateFormat {
 
-		String message() default "Default error";
+		String message() default "";
 
 	    Class<?>[] groups() default {};
 

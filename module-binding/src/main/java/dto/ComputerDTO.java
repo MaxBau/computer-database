@@ -17,10 +17,8 @@ public class ComputerDTO implements MessageSourceAware{
 	private long id;
 	@NotEmpty
 	private String name;
-	@NotEmpty
 	@DateFormat
 	private String introduced;
-	@NotEmpty
 	@DateFormat
 	private String discontinued;
 	private long companyId;
