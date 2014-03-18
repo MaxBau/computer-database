@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>excilys</groupId>
-			<artifactId>module-core</artifactId>
+			<artifactId>module-binding</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>

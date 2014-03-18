@@ -8,13 +8,13 @@
         <dependent-module archiveName="module-service-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/module-service/module-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="module-core-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/module-core/module-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="module-persistence-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/module-persistence/module-persistence">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="module-binding-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/module-binding/module-binding">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="module-core-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/module-core/module-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="module-webapp"/>
