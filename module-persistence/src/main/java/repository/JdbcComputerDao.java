@@ -218,7 +218,7 @@ public class JdbcComputerDao {
 	public List<Computer> findAll() {
 
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,name,introduced,discontinued,company.id,company.name FROM computer " + "LEFT JOIN company ON company.id=computer.company_id";
+		String query = "SELECT computer.id,name,introduced,discontinued,company.id,company.name FROM computer LEFT JOIN company ON company.id=computer.company_id";
 		ResultSet results = null;
 		Connection connect = null;
 		Statement stmt = null;
@@ -275,7 +275,7 @@ public class JdbcComputerDao {
 	// }
 
 	public int count(String search) {
-		String query = "SELECT COUNT(computer.id) AS nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id " + "WHERE computer.name LIKE '%" + search + "%' "
+		String query = "SELECT COUNT(computer.id) AS nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%" + search + "%' "
 				+ "OR company.name LIKE '%" + search + "%'";
 
 		ResultSet results = null;
@@ -365,8 +365,8 @@ public class JdbcComputerDao {
 
 	public List<Computer> findAll(String search) {
 		List<Computer> computers = new ArrayList<Computer>();
-		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name "
-				+ "FROM computer LEFT JOIN company ON computer.company_id=company.id " + "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'";
+		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id=company.id "
+		+ "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'";
 		ResultSet results = null;
 
 		Connection connect = null;
