@@ -7,6 +7,7 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
 
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -35,7 +36,7 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 			return false;
 		}
 
-		LocalDate date = new LocalDate(object);
+		LocalDate date = LocalDate.parse(object, DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, LocaleContextHolder.getLocale())));
 
 		if (date.getYear() < 1970) {
 			constraintContext.buildConstraintViolationWithTemplate("{DateLimitMin}").addConstraintViolation();

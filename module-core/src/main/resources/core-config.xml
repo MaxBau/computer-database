@@ -1,10 +1,50 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       	   http://www.springframework.org/schema/tx 
+       	   http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<context:component-scan base-package="domain" />
+
+	<!-- JDBC Data Source. It is assumed you have MySQL running on localhost 
+		port 3306 with username root and blank password. Change below if it's not 
+		the case -->
+<!-- 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" -->
+<!-- 		destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" /> -->
+<!-- 		<property name="username" value="root" /> -->
+<!-- 		<property name="password" value="root" /> -->
+<!-- 		<property name="validationQuery" value="SELECT 1" /> -->
+<!-- 	</bean> -->
+
+	<!-- Hibernate Session Factory -->
+<!-- 	<bean id="mySessionFactory" -->
+<!-- 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> -->
+<!-- 		<property name="dataSource" ref="dataSource" /> -->
+<!-- 		<property name="packagesToScan"> -->
+<!-- 			<array> -->
+<!-- 				<value>domain</value> -->
+<!-- 			</array> -->
+<!-- 		</property> -->
+<!-- 		<property name="hibernateProperties"> -->
+<!-- 			<value> -->
+<!-- 				hibernate.dialect=org.hibernate.dialect.MySQLDialect -->
+<!-- 			</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+	<!-- Hibernate Transaction Manager -->
+<!-- 	<bean id="transactionManager" -->
+<!-- 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"> -->
+<!-- 		<property name="sessionFactory" ref="mySessionFactory" /> -->
+<!-- 	</bean> -->
+
+	<!-- Activates annotation based transaction management -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

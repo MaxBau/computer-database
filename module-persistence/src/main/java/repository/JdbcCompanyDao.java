@@ -19,8 +19,6 @@ import domain.Company;
 @Transactional
 public class JdbcCompanyDao {
 	@Autowired
-	Company company;
-	@Autowired
 	DataSource dataSource;
 	
 	public JdbcCompanyDao()
