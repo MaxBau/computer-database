@@ -2,9 +2,15 @@ package services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +27,7 @@ import dto.ComputerDTO;
 
 @Service
 
-public class ComputerService {
+public class ComputerService implements MessageSourceAware{
 	@Autowired
 	private JdbcComputerDao computerDao;
 	
@@ -34,9 +40,16 @@ public class ComputerService {
 	@Autowired
 	private PlatformTransactionManager transactionManager;
 	
+	private static MessageSource messageSource;
+		
 	public ComputerService()
 	{
 		super();
+	}
+	
+	public void setMessageSource(MessageSource messageSource) {
+		// TODO Auto-generated method stub
+		ComputerService.messageSource = messageSource;
 	}
 	
 	public List<Computer> getAllComputers()
@@ -60,7 +73,10 @@ public class ComputerService {
 	
 	@Transactional
 	public void addComputer(String name, String introduced, String discontinued, long companyId) {
-		Computer c = new Computer(name,LocalDate.parse(introduced),LocalDate.parse(discontinued), companyDao.find(companyId));
+		Locale locale = LocaleContextHolder.getLocale();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
+
+		Computer c = new Computer(name,LocalDate.parse(introduced,fmt),LocalDate.parse(discontinued,fmt), companyDao.find(companyId));
 		computerDao.add(c);
 		
 		Log l = new Log("Computer added "+c.toString(), 0);
@@ -73,32 +89,44 @@ public class ComputerService {
 	}
 	
 	public Computer create(String name, String introduced, String discontinued, Company company) {
+		Locale locale = LocaleContextHolder.getLocale();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
 		
-		LocalDate introducedSubmit = LocalDate.parse(introduced);
-		LocalDate discontinuedSubmit = LocalDate.parse(discontinued);
+		LocalDate introducedSubmit = LocalDate.parse(introduced,fmt);
+		LocalDate discontinuedSubmit = LocalDate.parse(discontinued,fmt);
 		return computerDao.create(name, introducedSubmit, discontinuedSubmit, company);
 	}
 	
 	public Computer create(long id,String name, String introduced, String discontinued, Company company) {
+		Locale locale = LocaleContextHolder.getLocale();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
 		
-		LocalDate introducedSubmit = LocalDate.parse(introduced);
-		LocalDate discontinuedSubmit = LocalDate.parse(discontinued);
+		LocalDate introducedSubmit = LocalDate.parse(introduced,fmt);
+		LocalDate discontinuedSubmit = LocalDate.parse(discontinued,fmt);
 		
 		return computerDao.create(id, name, introducedSubmit, discontinuedSubmit, company);
 	}
 	
-
+	@Transactional
 	public void update(ComputerDTO computerDto) {
 		Computer c = new ComputerDTO().fromDto(computerDto);
 		c.setCompany(companyDao.find(computerDto.getCompanyId()));
 		computerDao.update(c);
+		
+		Log l = new Log("Computer updated "+c , 0);
+		logDao.addLog(l);
 	}
 	
+	@Transactional
 	public void deleteComputer(long id) {
+		Log l = new Log("Computer deleted "+id , 0);
+		logDao.addLog(l);
 		computerDao.delete(id);
 	}
 	
 	public List<Computer> findAll(String search) {
 		return computerDao.findAll(search);
 	}
+
+	
 }

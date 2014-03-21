@@ -4,12 +4,12 @@ import java.util.List;
 
 public class WrapperListInt {
 	private List list;
-	private int integer;
+	private long integer;
 	public WrapperListInt() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public WrapperListInt(List list, int integer) {
+	public WrapperListInt(List list, long integer) {
 		super();
 		this.list = list;
 		this.integer = integer;
@@ -20,10 +20,10 @@ public class WrapperListInt {
 	public void setList(List list) {
 		this.list = list;
 	}
-	public int getInteger() {
+	public long getInteger() {
 		return integer;
 	}
-	public void setInteger(int integer) {
+	public void setInteger(long integer) {
 		this.integer = integer;
 	}
 	

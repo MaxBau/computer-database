@@ -23,9 +23,9 @@ public class LogDAO {
 
 	public void addLog(Log l) 
 	{
-		LOGGER.debug("Log before : " + l);
+		
 		entityManager.persist(l);
-		LOGGER.debug("Log after : " + l);
+		LOGGER.debug("Log added : " + l);
 		
 	}
 	

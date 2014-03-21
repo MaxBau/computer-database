@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -45,7 +45,7 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 					<td><a href="editComputerForm?id=${computer.id}" onclick="">${computer.name}</a></td>
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
-					<td>${computer.company.name }</td>
+					<td>${computer.companyName }</td>
 					<td><a href="deleteComputer?id=${computer.id}" class="btn danger"><spring:message code="button.delete.title" text="default text" /></a>
 				</tr>
 			</c:forEach>
