@@ -3,11 +3,15 @@ package domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 @Entity
@@ -15,17 +19,21 @@ import org.joda.time.LocalDate;
 public class Computer {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(name="name")
 	private String name;
 	@Column(name="introduced")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+	@Temporal(TemporalType.DATE)
 	private LocalDate introduced;
 	@Column(name="discontinued")
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+	@Temporal(TemporalType.DATE)
 	private LocalDate discontinued;
 
 	@ManyToOne
-	@JoinColumn(name="id")
+	@JoinColumn(referencedColumnName="id")
 	private Company company;
 	
 	public Computer() {

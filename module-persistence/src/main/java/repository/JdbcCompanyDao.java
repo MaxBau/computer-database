@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import domain.Company;
 public class JdbcCompanyDao {
 	@Autowired
 	DataSource dataSource;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	public JdbcCompanyDao()
 	{
@@ -36,39 +41,41 @@ public class JdbcCompanyDao {
 	}
 
 	public Company find(long id) {
-		String query = "SELECT * FROM company WHERE id="+id;
-		ResultSet results = null;
-		Connection connect = null;
-		Company company = null;
 		
-		try {
-			connect = dataSource.getConnection();
-			Statement stmt = connect.createStatement();
-			results = stmt.executeQuery(query);
-			company = new Company();
-			while (results.next())
-			{
-				company.setId(results.getLong("id"));
-				company.setName(results.getString("name"));
-			}
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		} finally {
-			if (connect!=null) {
-				try {
-					connect.close();
-				} catch (SQLException e) {}
-			}
-			
-			if (results!=null) {
-				try {
-					results.close();
-				} catch (SQLException e) {}
-			}
-		}
-				
-		return company;
+		return entityManager.find(Company.class, id);
+		
+//		String query = "SELECT * FROM company WHERE id="+id;
+//		ResultSet results = null;
+//		Connection connect = null;
+//		Company company = null;
+//		
+//		try {
+//			connect = dataSource.getConnection();
+//			Statement stmt = connect.createStatement();
+//			results = stmt.executeQuery(query);
+//			company = new Company();
+//			while (results.next())
+//			{
+//				company.setId(results.getLong("id"));
+//				company.setName(results.getString("name"));
+//			}
+//		} catch (SQLException e) {
+//			
+//			e.printStackTrace();
+//		} finally {
+//			if (connect!=null) {
+//				try {
+//					connect.close();
+//				} catch (SQLException e) {}
+//			}
+//			
+//			if (results!=null) {
+//				try {
+//					results.close();
+//				} catch (SQLException e) {}
+//			}
+//		}
+	
 	}
 
 	public Company create(Connection connect,Company obj) {

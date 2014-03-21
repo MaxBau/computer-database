@@ -10,26 +10,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import domain.Company;
 import domain.Computer;
 
 @Repository
-@Transactional
 public class JdbcComputerDao {
 
 	public JdbcComputerDao() {
 		super();
 	}
-
+	static final Logger LOGGER = LoggerFactory.getLogger(JdbcComputerDao.class);
+	
 	@Autowired
 	DataSource dataSource;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public Computer find(long id) {
 		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,company.id,company.name "
@@ -88,45 +94,50 @@ public class JdbcComputerDao {
 	}
 
 	public Computer update(Computer obj) {
-		String query = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=?";
-
-		Connection connect = null;
-		PreparedStatement stmt = null;
-
-		try {
-			connect = dataSource.getConnection();
-			stmt = connect.prepareStatement(query);
-			stmt.setString(1, obj.getName());
-			stmt.setTimestamp(2, new Timestamp(obj.getIntroduced().toDateTimeAtStartOfDay().getMillis()));
-			stmt.setTimestamp(3, new Timestamp(obj.getDiscontinued().toDateTimeAtStartOfDay().getMillis()));
-
-			if (obj.getCompany().getId() != 0) {
-				stmt.setLong(4, obj.getCompany().getId());
-			} else {
-				stmt.setNull(4, java.sql.Types.INTEGER);
-			}
-
-			stmt.setLong(5, obj.getId());
-
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (connect != null) {
-				try {
-					connect.close();
-				} catch (SQLException e) {
-				}
-			}
-
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
+		
+		LOGGER.debug("Computer before"+obj);
+		entityManager.merge(obj);
+		LOGGER.debug("Computer after"+obj);
+		
+//		String query = "UPDATE computer SET name=?,introduced=?,discontinued=?,company_id=? WHERE id=?";
+//
+//		Connection connect = null;
+//		PreparedStatement stmt = null;
+//
+//		try {
+//			connect = dataSource.getConnection();
+//			stmt = connect.prepareStatement(query);
+//			stmt.setString(1, obj.getName());
+//			stmt.setTimestamp(2, new Timestamp(obj.getIntroduced().toDateTimeAtStartOfDay().getMillis()));
+//			stmt.setTimestamp(3, new Timestamp(obj.getDiscontinued().toDateTimeAtStartOfDay().getMillis()));
+//
+//			if (obj.getCompany().getId() != 0) {
+//				stmt.setLong(4, obj.getCompany().getId());
+//			} else {
+//				stmt.setNull(4, java.sql.Types.INTEGER);
+//			}
+//
+//			stmt.setLong(5, obj.getId());
+//
+//			stmt.executeUpdate();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			if (connect != null) {
+//				try {
+//					connect.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//
+//			if (stmt != null) {
+//				try {
+//					stmt.close();
+//				} catch (SQLException e) {
+//				}
+//			}
+//		}
 		return null;
 	}
 
@@ -263,18 +274,8 @@ public class JdbcComputerDao {
 		return computers;
 	}
 
-	// private static class ComputerMapper implements RowMapper {
-	// public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
-	// Computer prod = new Computer();
-	// prod.setId(rs.getInt("id"));
-	// prod.setName(rs.getString("name"));
-	// //prod.setPrice(new Double(rs.getDouble("price")));
-	// return prod;
-	// }
-	//
-	// }
-
 	public int count(String search) {
+		
 		String query = "SELECT COUNT(computer.id) AS nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%" + search + "%' "
 				+ "OR company.name LIKE '%" + search + "%'";
 
@@ -313,37 +314,12 @@ public class JdbcComputerDao {
 		return nb;
 	}
 
-	public void add(String name, LocalDate introducedDate, LocalDate discontinuedDate, long companyId) {
+	public void add(Computer c) {
+		
+		LOGGER.debug("Computer before : " + c);
+		entityManager.persist(c);
+		LOGGER.debug("Computer after : " + c);
 
-		String query = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-
-		Connection connect = null;
-		PreparedStatement stmt = null;
-		try {
-			connect = dataSource.getConnection();
-			stmt = connect.prepareStatement(query);
-
-			stmt.setString(1, name);
-			stmt.setTimestamp(2, new Timestamp(introducedDate.toDateTimeAtStartOfDay().getMillis()));
-			stmt.setTimestamp(3, new Timestamp(discontinuedDate.toDateTimeAtStartOfDay().getMillis()));
-
-			if (companyId != 0) {
-				stmt.setLong(4, companyId);
-			} else {
-				stmt.setNull(4, java.sql.Types.INTEGER);
-			}
-
-			stmt.executeUpdate();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				connect.close();
-			} catch (SQLException e) {
-			}
-		}
 	}
 
 	public Computer create(Computer obj) {
@@ -366,7 +342,7 @@ public class JdbcComputerDao {
 	public List<Computer> findAll(String search) {
 		List<Computer> computers = new ArrayList<Computer>();
 		String query = "SELECT computer.id,computer.name,computer.introduced,computer.discontinued,computer.company_id,company.id,company.name FROM computer LEFT JOIN company ON computer.company_id=company.id "
-		+ "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'";
+				+ "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'";
 		ResultSet results = null;
 
 		Connection connect = null;

@@ -6,13 +6,17 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import repository.JdbcCompanyDao;
+import repository.JdbcComputerDao;
+import repository.LogDAO;
 import domain.Company;
 import domain.Computer;
+import domain.Log;
 import domain.WrapperListInt;
 import dto.ComputerDTO;
-import repository.JdbcComputerDao;
 
 
 @Service
@@ -20,6 +24,15 @@ import repository.JdbcComputerDao;
 public class ComputerService {
 	@Autowired
 	private JdbcComputerDao computerDao;
+	
+	@Autowired
+	private JdbcCompanyDao companyDao;
+	
+	@Autowired
+	private LogDAO logDao;
+	
+	@Autowired
+	private PlatformTransactionManager transactionManager;
 	
 	public ComputerService()
 	{
@@ -45,9 +58,14 @@ public class ComputerService {
 		return wrapper;
 	}
 	
+	@Transactional
 	public void addComputer(String name, String introduced, String discontinued, long companyId) {
-
-		computerDao.add(name, LocalDate.parse(introduced), LocalDate.parse(discontinued), companyId);
+		Computer c = new Computer(name,LocalDate.parse(introduced),LocalDate.parse(discontinued), companyDao.find(companyId));
+		computerDao.add(c);
+		
+		Log l = new Log("Computer added "+c.toString(), 0);
+		logDao.addLog(l);
+		
 	}
 	
 	public ComputerDTO getComputerById(long id) {
@@ -71,8 +89,9 @@ public class ComputerService {
 	
 
 	public void update(ComputerDTO computerDto) {
-
-		computerDao.update(new ComputerDTO().fromDto(computerDto));
+		Computer c = new ComputerDTO().fromDto(computerDto);
+		c.setCompany(companyDao.find(computerDto.getCompanyId()));
+		computerDao.update(c);
 	}
 	
 	public void deleteComputer(long id) {

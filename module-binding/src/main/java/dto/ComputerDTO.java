@@ -1,5 +1,6 @@
 package dto;
 
+import java.sql.Timestamp;
 import java.util.Locale;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -104,8 +105,8 @@ public class ComputerDTO implements MessageSourceAware{
 		ComputerDTO dto = new ComputerDTO();
 		dto.setId(computer.getId());
 		dto.setName(computer.getName());
-		if (computer.getIntroduced()!=null) dto.setIntroduced(computer.getIntroduced().toString(dateFormat, locale));
-		if (computer.getDiscontinued()!=null) dto.setDiscontinued(computer.getDiscontinued().toString(dateFormat, locale));
+		if (computer.getIntroduced()!=null) dto.setIntroduced(computer.getIntroduced().toString(dateFormat));
+		if (computer.getDiscontinued()!=null) dto.setDiscontinued(computer.getDiscontinued().toString(dateFormat));
 	
 		if (computer.getCompany()!=null) {
 			dto.setCompanyId(computer.getCompany().getId());
