@@ -36,8 +36,16 @@ public class ComputerDao {
 	private EntityManager entityManager;
 
 	public Computer find(long id) {
-		LOGGER.debug("Retrieving computer");
-		return entityManager.find(Computer.class, id);
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+		CriteriaQuery<Computer> computerQuery = builder.createQuery(Computer.class);
+
+		Root<Computer> computerRoot = computerQuery.from(Computer.class);
+		Expression<String> pathId = computerRoot.get("id");
+		computerQuery.select(computerRoot).where(builder.equal(pathId, id));
+
+		return entityManager.createQuery(computerQuery).getSingleResult();
+
 	}
 
 	public void update(Computer obj) {
