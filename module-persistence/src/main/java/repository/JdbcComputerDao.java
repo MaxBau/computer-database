@@ -52,7 +52,7 @@ public class JdbcComputerDao {
 	public List<Computer> findAll(String search, String order, String sens, String limitMin, String limitMax) {
 		if (order.equals(" ")) order = "computer.name";
 		
-		String query = "SELECT computer FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search ORDER BY "+order+" ASC ";
+		String query = "SELECT computer FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search OR company.name LIKE :search ORDER BY "+order+" ASC ";
 
 		return entityManager.createQuery(query).setParameter("search", "%" + search + "%")
 				.setFirstResult(Integer.valueOf(limitMin))
@@ -70,7 +70,7 @@ public class JdbcComputerDao {
 
 	public long count(String search) {
 
-		String query = "SELECT COUNT(computer) FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search ";
+		String query = "SELECT COUNT(computer) FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search OR company.name LIKE :search";
 		return (Long) entityManager.createQuery(query).setParameter("search", "%" + search + "%").getSingleResult();
 	}
 
@@ -92,7 +92,7 @@ public class JdbcComputerDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Computer> findAll(String search) {
-		String query = "SELECT computer FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search ";
+		String query = "SELECT computer FROM Computer as computer LEFT JOIN computer.company company WITH company.name LIKE :search WHERE computer.name LIKE :search OR company.name LIKE :search";
 
 		return entityManager.createQuery(query).setParameter("search", "%" + search + "%").getResultList();
 	}
