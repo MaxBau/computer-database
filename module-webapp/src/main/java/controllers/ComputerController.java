@@ -2,25 +2,22 @@ package controllers;
 
 import javax.validation.Valid;
 
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.WrapperListInt;
-import dto.ComputerDTO;
 import services.CompanyService;
 import services.ComputerService;
+import domain.WrapperListInt;
+import dto.ComputerDTO;
 
 @Controller
 @RequestMapping("/computer")
@@ -122,22 +119,5 @@ public class ComputerController {
 		computerService.deleteComputer(id);
 
 		return new ModelAndView("redirect:/computer/dashboard");
-	}
-
-	@RequestMapping(value = "search", method = RequestMethod.GET)
-	public ModelAndView searchComputer(@RequestParam String search) {
-		logger.info("Searching for computer");
-
-		ModelAndView myModel = new ModelAndView();
-
-		myModel.setViewName("dashboard");
-		myModel.addObject("computerList", computerService.findAll(search));
-		return myModel;
-	}
-
-	// Fourni à Spring le moyen de convertir les string en LocalDate
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(LocalDate.class, new LocaleDateEditor());
 	}
 }

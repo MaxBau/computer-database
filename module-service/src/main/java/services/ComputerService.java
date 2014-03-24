@@ -12,13 +12,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.JdbcCompanyDao;
-import repository.JdbcComputerDao;
+import repository.CompanyDao;
+import repository.ComputerDao;
 import repository.LogDAO;
-import domain.Company;
 import domain.Computer;
 import domain.Log;
 import domain.WrapperListInt;
@@ -29,17 +27,14 @@ import dto.ComputerDTO;
 
 public class ComputerService implements MessageSourceAware{
 	@Autowired
-	private JdbcComputerDao computerDao;
+	private ComputerDao computerDao;
 	
 	@Autowired
-	private JdbcCompanyDao companyDao;
+	private CompanyDao companyDao;
 	
 	@Autowired
 	private LogDAO logDao;
-	
-	@Autowired
-	private PlatformTransactionManager transactionManager;
-	
+
 	private static MessageSource messageSource;
 		
 	public ComputerService()
@@ -52,11 +47,7 @@ public class ComputerService implements MessageSourceAware{
 		ComputerService.messageSource = messageSource;
 	}
 	
-	public List<Computer> getAllComputers()
-	{
-		return computerDao.findAll();
-	}
-	@Transactional
+	@Transactional(readOnly=true)
 	public WrapperListInt findAll(String search,String order,String sens,String limitMin, String limitMax) {
 		
 		WrapperListInt wrapper = new WrapperListInt(computerDao.findAll(search,order,sens,limitMin, limitMax),computerDao.count(search));
@@ -88,25 +79,6 @@ public class ComputerService implements MessageSourceAware{
 		return new ComputerDTO().toDto(computerDao.find(id));
 	}
 	
-	public Computer create(String name, String introduced, String discontinued, Company company) {
-		Locale locale = LocaleContextHolder.getLocale();
-		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
-		
-		LocalDate introducedSubmit = LocalDate.parse(introduced,fmt);
-		LocalDate discontinuedSubmit = LocalDate.parse(discontinued,fmt);
-		return computerDao.create(name, introducedSubmit, discontinuedSubmit, company);
-	}
-	
-	public Computer create(long id,String name, String introduced, String discontinued, Company company) {
-		Locale locale = LocaleContextHolder.getLocale();
-		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
-		
-		LocalDate introducedSubmit = LocalDate.parse(introduced,fmt);
-		LocalDate discontinuedSubmit = LocalDate.parse(discontinued,fmt);
-		
-		return computerDao.create(id, name, introducedSubmit, discontinuedSubmit, company);
-	}
-	
 	@Transactional
 	public void update(ComputerDTO computerDto) {
 		Computer c = new ComputerDTO().fromDto(computerDto);
@@ -123,10 +95,4 @@ public class ComputerService implements MessageSourceAware{
 		logDao.addLog(l);
 		computerDao.delete(id);
 	}
-	
-	public List<Computer> findAll(String search) {
-		return computerDao.findAll(search);
-	}
-
-	
 }
