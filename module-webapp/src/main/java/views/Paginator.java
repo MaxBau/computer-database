@@ -17,7 +17,7 @@ public class Paginator extends TagSupport{
 		JspWriter out = pageContext.getOut();
 		for (int i = 0; i <= nbPages; i++) {
 			try {
-				out.write("<a href='dashboard?limitmin="+(i*itemsPerPage)+"&limitmax="+itemsPerPage+"&search="+search+"'>"+(i+1)+"</a> ");
+				out.write("<a href='dashboard?limitmin="+(i)+"&limitmax="+itemsPerPage+"&search="+search+"'>"+(i+1)+"</a> ");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

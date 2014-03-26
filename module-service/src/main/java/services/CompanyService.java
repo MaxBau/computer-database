@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.CompanyDao;
+import repository.CompanyRepository;
 import domain.Company;
 
 @Service
 @Transactional
 public class CompanyService {
 	@Autowired
-	CompanyDao company ;
+	private CompanyRepository companyRepository;
 	
 	public CompanyService()
 	{
@@ -21,10 +21,10 @@ public class CompanyService {
 	}
 
 	public Company find(long id) {
-		return company.find(id);
+		return companyRepository.findOne(id);
 	}
 	
 	public List<Company> getAllCompany() {
-		return company.findAll();
+		return companyRepository.findAll();
 	}
 }

@@ -31,7 +31,7 @@ public class ComputerController {
 	CompanyService companyService;
 
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView listComputers(@RequestParam(value = "search", defaultValue = "") String search, @RequestParam(value = "order", defaultValue = " ") String order,
+	public ModelAndView listComputers(@RequestParam(value = "search", defaultValue = "") String search, @RequestParam(value = "order", defaultValue = "id") String order,
 			@RequestParam(value = "limitmin", defaultValue = "0") String limitMin, @RequestParam(value = "limitmax", defaultValue = "10") String limitMax) {
 
 		if (!order.equals(" ")) {

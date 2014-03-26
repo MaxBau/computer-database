@@ -1,7 +1,5 @@
 package services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.LocalDate;
@@ -11,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.CompanyDao;
-import repository.ComputerDao;
-import repository.LogDAO;
+import repository.ComputerRepository;
+import repository.LogRepository;
 import domain.Computer;
 import domain.Log;
 import domain.WrapperListInt;
@@ -26,15 +25,17 @@ import dto.ComputerDTO;
 @Service
 
 public class ComputerService implements MessageSourceAware{
-	@Autowired
-	private ComputerDao computerDao;
-	
-	@Autowired
-	private CompanyDao companyDao;
-	
-	@Autowired
-	private LogDAO logDao;
 
+	@Autowired
+	private ComputerRepository computerRepository;
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private LogRepository logRepository;
+	
+	
 	private static MessageSource messageSource;
 		
 	public ComputerService()
@@ -50,16 +51,20 @@ public class ComputerService implements MessageSourceAware{
 	@Transactional(readOnly=true)
 	public WrapperListInt findAll(String search,String order,String sens,String limitMin, String limitMax) {
 		
-		WrapperListInt wrapper = new WrapperListInt(computerDao.findAll(search,order,sens,limitMin, limitMax),computerDao.count(search));
-		
-		ComputerDTO cDto = new ComputerDTO();
-		List<ComputerDTO> computerList = new ArrayList<ComputerDTO>();
-		for (Object computer : wrapper.getList()) {
-			computerList.add(cDto.toDto((Computer) computer));
+
+		Direction direction;
+		if (sens=="ASC") {
+			direction = Direction.ASC;
+		} else {
+			direction = Direction.DESC;
 		}
+	
+		PageRequest page = new PageRequest(Integer.valueOf(limitMin), Integer.valueOf(limitMax),direction,order);
+		WrapperListInt wrapper = new WrapperListInt(computerRepository.findByNameContainingOrCompanyNameContaining(search,search, page),
+						computerRepository.countByNameContainingOrCompanyNameContaining(search, search));
 		
-		wrapper.setList(computerList);
-		return wrapper;
+		return wrapper ;
+
 	}
 	
 	@Transactional
@@ -67,32 +72,32 @@ public class ComputerService implements MessageSourceAware{
 		Locale locale = LocaleContextHolder.getLocale();
 		DateTimeFormatter fmt = DateTimeFormat.forPattern(messageSource.getMessage("date.format", null, locale));
 
-		Computer c = new Computer(name,LocalDate.parse(introduced,fmt),LocalDate.parse(discontinued,fmt), companyDao.find(companyId));
-		computerDao.add(c);
+		Computer c = new Computer(name,LocalDate.parse(introduced,fmt),LocalDate.parse(discontinued,fmt), companyService.find(companyId));
+		computerRepository.save(c);
 		
 		Log l = new Log("Computer added "+c.toString(), 0);
-		logDao.addLog(l);
+		logRepository.save(l);
 		
 	}
 	
 	public ComputerDTO getComputerById(long id) {
-		return new ComputerDTO().toDto(computerDao.find(id));
+		return new ComputerDTO().toDto(computerRepository.findOne(id));
 	}
 	
 	@Transactional
 	public void update(ComputerDTO computerDto) {
 		Computer c = new ComputerDTO().fromDto(computerDto);
-		c.setCompany(companyDao.find(computerDto.getCompanyId()));
-		computerDao.update(c);
+		c.setCompany(companyService.find(computerDto.getCompanyId()));
+		computerRepository.save(c);
 		
 		Log l = new Log("Computer updated "+c , 0);
-		logDao.addLog(l);
+		logRepository.save(l);
 	}
 	
 	@Transactional
 	public void deleteComputer(long id) {
 		Log l = new Log("Computer deleted "+id , 0);
-		logDao.addLog(l);
-		computerDao.delete(id);
+		logRepository.save(l);
+		computerRepository.delete(id);
 	}
 }
