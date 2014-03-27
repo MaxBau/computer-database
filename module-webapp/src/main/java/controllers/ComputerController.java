@@ -31,8 +31,10 @@ public class ComputerController {
 	CompanyService companyService;
 
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView listComputers(@RequestParam(value = "search", defaultValue = "") String search, @RequestParam(value = "order", defaultValue = "id") String order,
-			@RequestParam(value = "limitmin", defaultValue = "0") String limitMin, @RequestParam(value = "limitmax", defaultValue = "10") String limitMax) {
+	public ModelAndView listComputers(@RequestParam(value = "search", defaultValue = "") String search, 
+			@RequestParam(value = "order", defaultValue = "id") String order,
+			@RequestParam(value = "limitmin", defaultValue = "0") String limitMin, 
+			@RequestParam(value = "limitmax", defaultValue = "10") String limitMax) {
 
 		if (!order.equals(" ")) {
 			if (sens.equals("ASC")) {
@@ -119,5 +121,14 @@ public class ComputerController {
 		computerService.deleteComputer(id);
 
 		return new ModelAndView("redirect:/computer/dashboard");
+	}
+	
+	@RequestMapping(value = "/loggedOut")
+	public ModelAndView loggedOut() {
+		logger.info("Logging out ");
+		ModelAndView myModel = new ModelAndView();
+		myModel.setViewName("loggedOut");
+
+		return myModel;
 	}
 }
