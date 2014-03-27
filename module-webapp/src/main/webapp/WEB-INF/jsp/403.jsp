@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Page inexistante</title>
+<title>Erreur de permission</title>
 </head>
 <body>
-Cette page n'existe pas ! ( <a href="computer/dashboard">Accueil</a>)
+Vous n'avez aucun droit ici ! ( <a href="computer/dashboard">Accueil</a>)
 </body>
 </html>

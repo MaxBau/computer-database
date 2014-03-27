@@ -44,7 +44,6 @@ public class ComputerService implements MessageSourceAware{
 	}
 	
 	public void setMessageSource(MessageSource messageSource) {
-		// TODO Auto-generated method stub
 		ComputerService.messageSource = messageSource;
 	}
 	

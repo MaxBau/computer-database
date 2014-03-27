@@ -23,7 +23,7 @@
 					text="default text" /></a>
 		</h1>
 		<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-			<a href="logout" id="logoutSecurity" class="btn danger"
+			<a href="<c:url value="/j_spring_security_logout" />" id="logoutSecurity" class="btn danger"
 				style="float: right"> Logout</a>
 		</sec:authorize>
 	</header>
