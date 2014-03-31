@@ -1,5 +1,6 @@
 package services;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.LocalDate;
@@ -45,6 +46,10 @@ public class ComputerService implements MessageSourceAware{
 	
 	public void setMessageSource(MessageSource messageSource) {
 		ComputerService.messageSource = messageSource;
+	}
+	
+	public List<Computer> findAll() {
+		return computerRepository.findAll();
 	}
 	
 	@Transactional(readOnly=true)

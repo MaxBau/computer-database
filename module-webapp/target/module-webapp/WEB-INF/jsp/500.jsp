@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Page inexistante</title>
+<title>Erreur 500</title>
 </head>
 <body>
-Cette page n'existe pas ! ( <a href="computer/dashboard">Accueil</a>)
+Tout est cassé ! ( <a href="computer/dashboard">Accueil</a>)
 </body>
 </html>

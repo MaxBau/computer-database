@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -29,7 +30,7 @@
 		<springframework.version>4.0.2.RELEASE</springframework.version>
 		<spring-hibernate.version>1.2.9</spring-hibernate.version>
 
-		<hibernate.core.version>4.3.4.Final</hibernate.core.version>
+		<hibernate-core.version>4.3.4.Final</hibernate-core.version>
 		<hibernate.version>4.2.8.Final</hibernate.version>
 		<hibernate-validator.version>5.1.0.Final</hibernate-validator.version>
 		<persistence-api.version>1.0.2</persistence-api.version>
@@ -43,10 +44,18 @@
 		<querydsl.version>3.3.1</querydsl.version>
 		<spring-data.version>1.5.1.RELEASE</spring-data.version>
 		<spring-security.version>3.2.2.RELEASE</spring-security.version>
+		<springws.version>2.1.4.RELEASE</springws.version>
+		<jaxws.version>1.9</jaxws.version>
+		<org.apache.cxf.version>2.7.10</org.apache.cxf.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ws</groupId>
+				<artifactId>spring-ws-core</artifactId>
+				<version>${springws.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.mysema.querydsl</groupId>
 				<artifactId>querydsl-apt</artifactId>
@@ -113,12 +122,12 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>${hibernate.core.version}</version>
+				<version>${hibernate-core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>${hibernate.core.version}</version>
+				<version>${hibernate-core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -156,6 +165,17 @@
 				<version>${springframework.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>${spring-data.version}</version>
@@ -187,6 +207,21 @@
 				<artifactId>spring-security-config</artifactId>
 				<version>${spring-security.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+				<artifactId>jaxws-spring</artifactId>
+				<version>${jaxws.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<version>${org.apache.cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-transports-http</artifactId>
+				<version>${org.apache.cxf.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<modules>
@@ -195,5 +230,6 @@
 		<module>module-core</module>
 		<module>module-service</module>
 		<module>module-persistence</module>
+		<module>module-webservice</module>
 	</modules>
 </project>

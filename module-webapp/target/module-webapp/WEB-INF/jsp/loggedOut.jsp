@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Page inexistante</title>
+<title>Logged out</title>
 </head>
 <body>
-Cette page n'existe pas ! ( <a href="computer/dashboard">Accueil</a>)
+You've been logged out, see you ! ( <a href="dashboard">Accueil</a>)
 </body>
 </html>

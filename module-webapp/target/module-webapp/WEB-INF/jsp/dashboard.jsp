@@ -30,12 +30,12 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 				<tr>
 					<!-- Variable declarations for passing labels as parameters -->
 					<!-- Table header for Computer Name -->
-					<th><a href="dashboard?order=computer.name"><spring:message code="table.header.name" text="default text" /></a></th>
-					<th><a href="dashboard?order=computer.introduced"><spring:message code="table.header.introduced" text="default text" /></a></th>
+					<th><a href="dashboard?order=name"><spring:message code="table.header.name" text="default text" /></a></th>
+					<th><a href="dashboard?order=introduced"><spring:message code="table.header.introduced" text="default text" /></a></th>
 					<!-- Table header for Discontinued Date -->
-					<th><a href="dashboard?order=computer.discontinued"><spring:message code="table.header.discontinued" text="default text" /></a></th>
+					<th><a href="dashboard?order=discontinued"><spring:message code="table.header.discontinued" text="default text" /></a></th>
 					<!-- Table header for Company -->
-					<th><a href="dashboard?order=company.name"><spring:message code="table.header.company" text="default text" /></a></th>
+					<th><a href="dashboard?order=companyName"><spring:message code="table.header.company" text="default text" /></a></th>
 					<th> </th>
 				</tr>
 			</thead>
@@ -45,7 +45,7 @@ Language : <a href="?lang=en">English</a>|<a href="?lang=fr">Français</a>
 					<td><a href="editComputerForm?id=${computer.id}" onclick="">${computer.name}</a></td>
 					<td>${computer.introduced}</td>
 					<td>${computer.discontinued}</td>
-					<td>${computer.companyName }</td>
+					<td>${computer.company.name }</td>
 					<td><a href="deleteComputer?id=${computer.id}" class="btn danger"><spring:message code="button.delete.title" text="default text" /></a>
 				</tr>
 			</c:forEach>
