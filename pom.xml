@@ -46,7 +46,7 @@
 		<spring-security.version>3.2.2.RELEASE</spring-security.version>
 		<springws.version>2.1.4.RELEASE</springws.version>
 		<jaxws.version>1.9</jaxws.version>
-		<org.apache.cxf.version>2.7.10</org.apache.cxf.version>
+		<org.apache.cxf.version>2.7.0</org.apache.cxf.version>
 	</properties>
 
 	<dependencyManagement>
@@ -214,7 +214,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 				<version>${org.apache.cxf.version}</version>
 			</dependency>
 			<dependency>

@@ -2,13 +2,17 @@ package webservices;
 
 import java.util.List;
 
-import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import domain.Computer;
-@WebService
+
 public interface ComputerWS {
 
-		
-		public List<Computer> getComputerList();
+	@GET
+	@Produces("application/xml")
+	@Path("/getList")
+	public List<Computer> getComputerList();
 
 }
