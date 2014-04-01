@@ -6,14 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name="company")
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +24,6 @@ public class Company {
 
 	public Company() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Company(long id) {

@@ -19,15 +19,15 @@ http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 		</cxf:features>
 	</cxf:bus>
 
-<!-- 	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>  -->
+	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/> 
 
 	<jaxrs:server id="computerListREST" address="/computerList">
 		<jaxrs:serviceBeans>
-			<ref bean="computerWebService" />
+			<ref bean="serviceBean" />
 		</jaxrs:serviceBeans>
-<!-- 		<jaxrs:providers> -->
-<!-- 			<ref bean="jsonProvider" /> -->
-<!-- 		</jaxrs:providers> -->
+		<jaxrs:providers>
+			<ref bean="jsonProvider" />
+		</jaxrs:providers>
 	</jaxrs:server>
 
 

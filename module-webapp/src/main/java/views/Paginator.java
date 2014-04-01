@@ -7,6 +7,10 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 public class Paginator extends TagSupport{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2948755507882021359L;
 	private int itemsPerPage =10;
 	private int limitMin=0;
 	private int collectionSize;

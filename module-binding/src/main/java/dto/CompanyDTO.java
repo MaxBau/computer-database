@@ -14,7 +14,6 @@ public class CompanyDTO {
 
 	public CompanyDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public CompanyDTO(long id) {

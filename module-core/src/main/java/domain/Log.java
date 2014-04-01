@@ -20,7 +20,6 @@ public class Log {
 	
 	public Log() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Log(String message, int gravity) {
 		super();

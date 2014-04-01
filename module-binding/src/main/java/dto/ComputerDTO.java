@@ -35,7 +35,6 @@ public class ComputerDTO implements MessageSourceAware {
 
 	public ComputerDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public ComputerDTO(long id, String name, String introduced, String discontinued, long companyId, String companyName) {
